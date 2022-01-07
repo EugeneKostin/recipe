@@ -1,25 +1,40 @@
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import {
+	BrowserRouter as Router,
+	Routes,
+	Route
+} from "react-router-dom";
+// import logo from './logo.svg';
+import Recipes from './pages/Recipes';
+import Create from './pages/Create';
+import { ThemeProvider, createTheme , } from '@mui/material/styles';
+import { grey, yellow } from '@mui/material/colors';
+
+const theme = createTheme({
+	palette: {
+		primary: yellow,
+		secondary: grey,
+	},
+	// typography: {
+	//   fontFamily: 'Quicksand',
+	//   fontWeightLight: 400,
+	//   fontWeightRegular: 500,
+	//   fontWeightMedium: 600,
+	//   fontWeightBold: 700,
+	// }
+});
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	return (
+		<ThemeProvider theme={theme}>
+			<Router>
+				<Routes>
+					<Route path='/' element={<Recipes />} />
+					<Route path='/create' element={<Create />} />
+				</Routes>
+			</Router>
+		</ThemeProvider>
+	);
 }
 
 export default App;
