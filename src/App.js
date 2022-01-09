@@ -8,11 +8,11 @@ import {
 import Recipes from './pages/Recipes';
 import Create from './pages/Create';
 import { ThemeProvider, createTheme , } from '@mui/material/styles';
-import { grey, yellow } from '@mui/material/colors';
+import { grey, deepOrange } from '@mui/material/colors';
 
 const theme = createTheme({
 	palette: {
-		primary: yellow,
+		primary: deepOrange,
 		secondary: grey,
 	},
 	// typography: {
@@ -30,6 +30,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path='/' element={<Recipes />} />
+					{/* <Route path='/recipe/:id' element={<Create />} /> */}
 					<Route path='/create' element={<Create />} />
 				</Routes>
 			</Router>
