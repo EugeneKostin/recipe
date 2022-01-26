@@ -5,9 +5,10 @@ import {
 	Route
 } from "react-router-dom";
 // import logo from './logo.svg';
-import Recipes from './pages/Recipes';
-import Create from './pages/Create';
-import { ThemeProvider, createTheme , } from '@mui/material/styles';
+import { Recipes } from './pages/Recipes';
+import { Create } from './pages/Create';
+import { RecipeCard } from './pages/RecipeCard';
+import { ThemeProvider, createTheme, } from '@mui/material/styles';
 import { grey, deepOrange } from '@mui/material/colors';
 
 const theme = createTheme({
@@ -30,7 +31,7 @@ function App() {
 			<Router>
 				<Routes>
 					<Route path='/' element={<Recipes />} />
-					{/* <Route path='/recipe/:id' element={<Create />} /> */}
+					{/* <Route path='/recipe/:id' element={<RecipeCard />} /> */}
 					<Route path='/create' element={<Create />} />
 				</Routes>
 			</Router>

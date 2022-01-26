@@ -35,7 +35,7 @@ const testRecipes = [
     }
 ];
 
-function Recipes() {
+export const Recipes = () => {
     console.log('loop');
     const [recipes, setRecipes] = useState([]);
 
@@ -47,11 +47,11 @@ function Recipes() {
     }, [])
 
     // const handleDelete = async (id) => {
-        // await fetch('http://localhost:8000/notes/' + id, {
-        //     method: 'DELETE'
-        // })
-        // const filteredRecipes = recipes.filter(recipe => recipe.id != id)
-        // setRecipes(filteredRecipes)
+    // await fetch('http://localhost:8000/notes/' + id, {
+    //     method: 'DELETE'
+    // })
+    // const filteredRecipes = recipes.filter(recipe => recipe.id != id)
+    // setRecipes(filteredRecipes)
     // }
 
     return (
@@ -74,5 +74,3 @@ function Recipes() {
         </Container>
     );
 }
-
-export default Recipes;
