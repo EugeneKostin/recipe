@@ -2,7 +2,7 @@ import React from "react";
 import { Typography } from '@mui/material';
 
 
-function RecipeCard(props) {
+export const RecipeCard = (props) => {
 	return (
 		<div>
 			<Typography variant="h6">{props.recipe.title}</Typography>
@@ -10,5 +10,3 @@ function RecipeCard(props) {
 		</div>
 	);
 }
-
-export default RecipeCard;

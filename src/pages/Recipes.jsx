@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Typography, Container } from '@mui/material';
-import RecipeCard from "./RecipeCard.js"
+import { RecipeCard } from "./RecipeCard"
 
 const testRecipes = [
     {
