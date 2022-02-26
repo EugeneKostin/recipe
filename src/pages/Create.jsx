@@ -2,7 +2,9 @@ import { useState } from 'react';
 import { Container, Typography, Button, TextField } from '@mui/material';
 import { IngredientField } from '../components/IngredientField';
 import { CreateRecipeFormContext } from '../context';
-const titleValidator = /^[A-Za-zА-Яа-я0-9\s]*$/;
+import { FormValidator } from '../utils/formValidator';
+import { removeSpaces } from '../utils/removeSpaces';
+import { addDocument } from '../API/firestore';
 
 export const Create = () => {
   // localStorage || ''
@@ -23,33 +25,44 @@ export const Create = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    console.log(formData.title, 'err', titleError);
+    titleValidate(formData.title);
     if (!formData.title || titleError) {
       return;
     }
+
     console.log('data to send =>', formData);
+    (async () => {
+      await addDocument(formData);
+      console.log('yes');
+    })();
   };
+
   const handleChange = (e) => {
     // lodash debounce для пауцы при вводе
-    const value = e.target.value;
     const name = e.target.name;
+    const value = e.target.value;
+    name === 'title' && titleValidate(value);
     console.log(formData);
     setFormData((prevState) => ({
       ...prevState,
-      [name]: value.replace(/\s+/g, ' ').trim(),
+      [name]: value,
     }));
   };
-  const titleValidate = (e) => {
-    const value = e.target.value;
-    if (!value) {
-      setTitleError('Пожалуйста, введите название блюда');
-    } else if (!titleValidator.test(value)) {
-      setTitleError(
-        'Пожалуйста, введите корректное название блюда (только буквы и цифры)'
-      );
-    } else {
-      setTitleError(null);
-    }
+
+  const titleValidate = (value) => {
+    const validator = new FormValidator(value);
+    setTitleError(
+      validator.requiredValidateError() || validator.regexValidateError()
+    );
   };
+  const titleRegex = (e) => {
+    setFormData((prevState) => ({
+      ...prevState,
+      title: removeSpaces(e.target.value),
+    }));
+  };
+
   return (
     <CreateRecipeFormContext.Provider
       value={{
@@ -57,12 +70,11 @@ export const Create = () => {
         setFormData,
       }}
     >
-      <Container maxWidth='md'>
+      <Container maxWidth='md' sx={{ pb: 8 }}>
         <Typography
           className='header'
-          variant='h6'
+          variant='h4'
           color='textSecondary'
-          align='center'
           component='h1'
           mt={5}
         >
@@ -73,16 +85,12 @@ export const Create = () => {
             sx={{ mt: 5 }}
             label='Название блюда'
             variant='standard'
-            multiline
             fullWidth
             name='title'
             value={formData.title}
-            onChange={(e) => {
-              handleChange(e);
-              titleValidate(e);
-            }}
-            onBlur={titleValidate}
-            error={titleError}
+            onChange={handleChange}
+            onBlur={titleRegex}
+            error={!!titleError}
             helperText={titleError ? titleError : ' '}
             required
           />
