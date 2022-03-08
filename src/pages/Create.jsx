@@ -1,5 +1,14 @@
 import { useState } from 'react';
-import { Container, Typography, Button, TextField } from '@mui/material';
+import {
+  Container,
+  Typography,
+  Button,
+  TextField,
+  InputAdornment,
+  ButtonGroup,
+  Box,
+} from '@mui/material';
+import InputUnstyled from '@mui/base/InputUnstyled';
 import { IngredientField } from '../components/IngredientField';
 import { CreateRecipeFormContext } from '../context';
 import { FormValidator } from '../utils/formValidator';
@@ -11,7 +20,8 @@ export const Create = () => {
 
   const [formData, setFormData] = useState({
     title: '',
-    description: '',
+    cooking_time: 3,
+    instruction: '',
     ingredients: [
       {
         id: 0,
@@ -94,21 +104,49 @@ export const Create = () => {
             helperText={titleError ? titleError : ' '}
             required
           />
-
+          <TextField
+            label='Время готовки'
+            variant='standard'
+            name='cooking_time'
+            value={formData.cooking_time}
+            onChange={handleChange}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position='start'>мин.</InputAdornment>
+              ),
+            }}
+          />
+          <ButtonGroup variant='contained' aria-label='count button group'>
+            <Button>-</Button>
+            <TextField
+              variant='standard'
+              name='cooking_time'
+              value={formData.cooking_time}
+              onChange={handleChange}
+              readOnly='true'
+            />
+            <Button>+</Button>
+          </ButtonGroup>
+          <TextField
+            label='Name'
+            InputProps={{
+              input: <CustomInput name='amount' id='amount-simple' />,
+            }}
+          />
           <Typography variant='body1' mt={5}>
             Ингредиенты
           </Typography>
           <IngredientField />
           <Typography variant='body1' mt={5}>
-            Рецепт
+            Инструкция приготовления
           </Typography>
           <TextField
             sx={{ mt: 2 }}
             helperText='Опишите процесс приготовления блюда'
             multiline
             rows={4}
-            name='description'
-            value={formData.description}
+            name='instruction'
+            value={formData.instruction}
             onChange={handleChange}
             fullWidth
           />

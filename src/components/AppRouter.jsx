@@ -5,7 +5,7 @@ import { Layout } from './Layout';
 export const AppRouter = () => {
   console.log(routes);
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={window.location.pathname || ''}>
       <Routes>
         <Route element={<Layout />}>
           {routes.map((route) => (

@@ -15,9 +15,9 @@ export const RecipeCard = ({ recipe }) => {
       <CardActionArea component={RouterLink} to={`/recipe/${recipe.id}`}>
         <CardMedia
           component='img'
-          height='140'
-          image='/images/recipe.png'
-          alt='green iguana'
+          height='160'
+          image='/recipe/images/recipe.png'
+          alt='recipe'
         />
         <CardContent>
           <Typography gutterBottom variant='h5' component='div'>
