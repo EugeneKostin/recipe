@@ -1,5 +1,5 @@
 import { Typography, Container } from '@mui/material';
-import { Loader } from '../components/Loader';
+import { Loader } from '../components/UI/Loader';
 import React, { Suspense } from 'react';
 
 const RecipeList = React.lazy(() => import('../components/RecipeList'));

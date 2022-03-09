@@ -5,7 +5,6 @@ import {
   Typography,
   Box,
   Container,
-  ListItemText,
   MenuList,
   MenuItem,
 } from '@mui/material';

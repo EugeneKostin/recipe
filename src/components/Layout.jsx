@@ -1,9 +1,9 @@
 import { Container } from '@mui/material';
-import { BottomNav } from './BottomNav';
+import { BottomNav } from './UI/BottomNav';
 import { Outlet } from 'react-router-dom';
 import { useState } from 'react';
 import { menuItems } from '../utils/menuItems';
-import { TopNav } from './TopNav';
+import { TopNav } from './UI/TopNav';
 
 export const Layout = () => {
   return (

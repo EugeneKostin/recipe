@@ -1,4 +1,4 @@
-import { useContext, useState } from 'react';
+import { useContext } from 'react';
 import { TransitionGroup } from 'react-transition-group';
 import throttle from 'lodash/throttle';
 
@@ -9,7 +9,6 @@ import { IngredientItem } from './IngredientItem';
 import { CreateRecipeFormContext } from '../context';
 
 export const IngredientField = () => {
-  // const [ingredientFieldsIds, setIngredientFieldsIds] = useState([0]);
   const { formData, setFormData } = useContext(CreateRecipeFormContext);
 
   const handleAddField = () => {

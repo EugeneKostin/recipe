@@ -6,22 +6,29 @@ import {
   TextField,
   InputAdornment,
   ButtonGroup,
+  IconButton,
   Box,
 } from '@mui/material';
-import InputUnstyled from '@mui/base/InputUnstyled';
 import { IngredientField } from '../components/IngredientField';
 import { CreateRecipeFormContext } from '../context';
 import { FormValidator } from '../utils/formValidator';
 import { removeSpaces } from '../utils/removeSpaces';
 import { addDocument } from '../API/firestore';
+import { Input } from '../components/UI/Input';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import ImageUpload from '../components/ImageUpload';
+import { uploadImage, imageRef } from '../API/storage';
 
 export const Create = () => {
   // localStorage || ''
 
   const [formData, setFormData] = useState({
     title: '',
-    cooking_time: 3,
+    cookingTime: '',
+    portionsNum: 3,
     instruction: '',
+    imageUrl: '',
     ingredients: [
       {
         id: 0,
@@ -73,6 +80,15 @@ export const Create = () => {
     }));
   };
 
+  const onUploadChange = (image) => {
+    console.log(imageRef(image));
+    uploadImage(image);
+    setFormData((prevState) => ({
+      ...prevState,
+      imageUrl: imageRef(image),
+    }));
+  };
+
   return (
     <CreateRecipeFormContext.Provider
       value={{
@@ -86,7 +102,7 @@ export const Create = () => {
           variant='h4'
           color='textSecondary'
           component='h1'
-          mt={5}
+          mt={8}
         >
           Новый Рецепт
         </Typography>
@@ -94,7 +110,7 @@ export const Create = () => {
           <TextField
             sx={{ mt: 5 }}
             label='Название блюда'
-            variant='standard'
+            variant='outlined'
             fullWidth
             name='title'
             value={formData.title}
@@ -106,9 +122,9 @@ export const Create = () => {
           />
           <TextField
             label='Время готовки'
-            variant='standard'
+            variant='outlined'
             name='cooking_time'
-            value={formData.cooking_time}
+            value={formData.cookingTime}
             onChange={handleChange}
             InputProps={{
               endAdornment: (
@@ -116,23 +132,40 @@ export const Create = () => {
               ),
             }}
           />
-          <ButtonGroup variant='contained' aria-label='count button group'>
-            <Button>-</Button>
-            <TextField
-              variant='standard'
-              name='cooking_time'
-              value={formData.cooking_time}
-              onChange={handleChange}
-              readOnly='true'
-            />
-            <Button>+</Button>
-          </ButtonGroup>
-          <TextField
-            label='Name'
-            InputProps={{
-              input: <CustomInput name='amount' id='amount-simple' />,
-            }}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', mt: 4 }}>
+            <Typography variant='body1'>Количество порций</Typography>
+            <ButtonGroup
+              variant='contained'
+              aria-label='portions button group'
+              sx={{ ml: 3 }}
+            >
+              <IconButton
+                aria-label='reduce'
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    portionsNum: prev.portionsNum - 1,
+                  }))
+                }
+                color='primary'
+              >
+                <RemoveIcon />
+              </IconButton>
+              <Input name='portionsNum' value={formData.portionsNum} />
+              <IconButton
+                aria-label='add'
+                onClick={() =>
+                  setFormData((prev) => ({
+                    ...prev,
+                    portionsNum: prev.portionsNum + 1,
+                  }))
+                }
+                color='primary'
+              >
+                <AddIcon />
+              </IconButton>
+            </ButtonGroup>
+          </Box>
           <Typography variant='body1' mt={5}>
             Ингредиенты
           </Typography>
@@ -150,8 +183,16 @@ export const Create = () => {
             onChange={handleChange}
             fullWidth
           />
+          <Typography variant='body1' mt={5}>
+            Изображение рецепта
+          </Typography>
+          <ImageUpload
+            name={formData.imageUrl}
+            onChange={onUploadChange}
+            sx={{ mt: 2 }}
+          />
           <Button
-            sx={{ display: 'block', mt: 5, mx: 'auto' }}
+            sx={{ display: 'block', mt: 8, mx: 'auto' }}
             type='submit'
             variant='contained'
           >
