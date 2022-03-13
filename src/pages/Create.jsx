@@ -1,24 +1,16 @@
 import { useState } from 'react';
-import {
-  Container,
-  Typography,
-  Button,
-  TextField,
-  InputAdornment,
-  ButtonGroup,
-  IconButton,
-  Box,
-} from '@mui/material';
+import { Container, Typography, Button, TextField, InputAdornment, ButtonGroup, IconButton, Box } from '@mui/material';
 import { IngredientField } from '../components/IngredientField';
 import { CreateRecipeFormContext } from '../context';
 import { FormValidator } from '../utils/formValidator';
 import { removeSpaces } from '../utils/removeSpaces';
 import { addDocument } from '../API/firestore';
-import { Input } from '../components/UI/Input';
+import { Input } from '../components/RecipeCreateForm/FormInputNumWithControls';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import ImageUpload from '../components/ImageUpload';
 import { uploadImage, imageRef } from '../API/storage';
+import Form from '../components/RecipeCreateForm/Form';
 
 export const Create = () => {
   // localStorage || ''
@@ -69,9 +61,7 @@ export const Create = () => {
 
   const titleValidate = (value) => {
     const validator = new FormValidator(value);
-    setTitleError(
-      validator.requiredValidateError() || validator.regexValidateError()
-    );
+    setTitleError(validator.requiredValidateError() || validator.regexValidateError());
   };
   const titleRegex = (e) => {
     setFormData((prevState) => ({
@@ -90,116 +80,117 @@ export const Create = () => {
   };
 
   return (
-    <CreateRecipeFormContext.Provider
-      value={{
-        formData,
-        setFormData,
-      }}
-    >
-      <Container maxWidth='md' sx={{ pb: 8 }}>
-        <Typography
-          className='header'
-          variant='h4'
-          color='textSecondary'
-          component='h1'
-          mt={8}
-        >
-          Новый Рецепт
-        </Typography>
-        <form noValidate autoComplete='off' onSubmit={handleSubmit}>
-          <TextField
-            sx={{ mt: 5 }}
-            label='Название блюда'
-            variant='outlined'
-            fullWidth
-            name='title'
-            value={formData.title}
-            onChange={handleChange}
-            onBlur={titleRegex}
-            error={!!titleError}
-            helperText={titleError ? titleError : ' '}
-            required
-          />
-          <TextField
-            label='Время готовки'
-            variant='outlined'
-            name='cooking_time'
-            value={formData.cookingTime}
-            onChange={handleChange}
-            InputProps={{
-              endAdornment: (
-                <InputAdornment position='start'>мин.</InputAdornment>
-              ),
-            }}
-          />
-          <Box sx={{ display: 'flex', alignItems: 'center', mt: 4 }}>
-            <Typography variant='body1'>Количество порций</Typography>
-            <ButtonGroup
-              variant='contained'
-              aria-label='portions button group'
-              sx={{ ml: 3 }}
-            >
-              <IconButton
-                aria-label='reduce'
-                onClick={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    portionsNum: prev.portionsNum - 1,
-                  }))
-                }
-                color='primary'
-              >
-                <RemoveIcon />
-              </IconButton>
-              <Input name='portionsNum' value={formData.portionsNum} />
-              <IconButton
-                aria-label='add'
-                onClick={() =>
-                  setFormData((prev) => ({
-                    ...prev,
-                    portionsNum: prev.portionsNum + 1,
-                  }))
-                }
-                color='primary'
-              >
-                <AddIcon />
-              </IconButton>
-            </ButtonGroup>
-          </Box>
-          <Typography variant='body1' mt={5}>
-            Ингредиенты
-          </Typography>
-          <IngredientField />
-          <Typography variant='body1' mt={5}>
-            Инструкция приготовления
-          </Typography>
-          <TextField
-            sx={{ mt: 2 }}
-            helperText='Опишите процесс приготовления блюда'
-            multiline
-            rows={4}
-            name='instruction'
-            value={formData.instruction}
-            onChange={handleChange}
-            fullWidth
-          />
-          <Typography variant='body1' mt={5}>
-            Изображение рецепта
-          </Typography>
-          <ImageUpload
-            name={formData.imageUrl}
-            onChange={onUploadChange}
-            sx={{ mt: 2 }}
-          />
-          <Button
-            sx={{ display: 'block', mt: 8, mx: 'auto' }}
-            type='submit'
-            variant='contained'
-          >
-            Создать
-          </Button>
-        </form>
-      </Container>
-    </CreateRecipeFormContext.Provider>
+    <Form />
+    // <CreateRecipeFormContext.Provider
+    //   value={{
+    //     formData,
+    //     setFormData,
+    //   }}
+    // >
+    //   <Container maxWidth='md' sx={{ pb: 8 }}>
+    //     <Typography
+    //       className='header'
+    //       variant='h4'
+    //       color='textSecondary'
+    //       component='h1'
+    //       mt={8}
+    //     >
+    //       Новый Рецепт
+    //     </Typography>
+    //     <form noValidate autoComplete='off' onSubmit={handleSubmit}>
+    //       <TextField
+    //         sx={{ mt: 5 }}
+    //         label='Название блюда'
+    //         variant='outlined'
+    //         fullWidth
+    //         name='title'
+    //         value={formData.title}
+    //         onChange={handleChange}
+    //         onBlur={titleRegex}
+    //         error={!!titleError}
+    //         helperText={titleError ? titleError : ' '}
+    //         required
+    //       />
+    //       <TextField
+    //         label='Время готовки'
+    //         variant='outlined'
+    //         name='cooking_time'
+    //         value={formData.cookingTime}
+    //         onChange={handleChange}
+    //         InputProps={{
+    //           endAdornment: (
+    //             <InputAdornment position='start'>мин.</InputAdornment>
+    //           ),
+    //         }}
+    //       />
+    //       <Box sx={{ display: 'flex', alignItems: 'center', mt: 4 }}>
+    //         <Typography variant='body1'>Количество порций</Typography>
+    //         <ButtonGroup
+    //           variant='contained'
+    //           aria-label='portions button group'
+    //           sx={{ ml: 3 }}
+    //         >
+    //           <IconButton
+    //             aria-label='reduce'
+    //             onClick={() =>
+    //               setFormData((prev) => ({
+    //                 ...prev,
+    //                 portionsNum: prev.portionsNum - 1,
+    //               }))
+    //             }
+    //             color='primary'
+    //           >
+    //             <RemoveIcon />
+    //           </IconButton>
+    //           <Input name='portionsNum' value={formData.portionsNum} />
+    //           <IconButton
+    //             aria-label='add'
+    //             onClick={() =>
+    //               setFormData((prev) => ({
+    //                 ...prev,
+    //                 portionsNum: prev.portionsNum + 1,
+    //               }))
+    //             }
+    //             color='primary'
+    //           >
+    //             <AddIcon />
+    //           </IconButton>
+    //         </ButtonGroup>
+    //       </Box>
+    //       <Typography variant='body1' mt={5}>
+    //         Ингредиенты
+    //       </Typography>
+    //       <IngredientField />
+    //       <Typography variant='body1' mt={5}>
+    //         Инструкция приготовления
+    //       </Typography>
+    //       <TextField
+    //         sx={{ mt: 2 }}
+    //         helperText='Опишите процесс приготовления блюда'
+    //         multiline
+    //         rows={4}
+    //         name='instruction'
+    //         value={formData.instruction}
+    //         onChange={handleChange}
+    //         fullWidth
+    //       />
+    //       <Typography variant='body1' mt={5}>
+    //         Изображение рецепта
+    //       </Typography>
+    //       <ImageUpload
+    //         name={formData.imageUrl}
+    //         onChange={onUploadChange}
+    //         sx={{ mt: 2 }}
+    //       />
+    //       <Button
+    //         sx={{ display: 'block', mt: 8, mx: 'auto' }}
+    //         type='submit'
+    //         variant='contained'
+    //       >
+    //         Создать
+    //       </Button>
+    //     </form>
+    //   </Container>
+    // </CreateRecipeFormContext.Provider>
   );
 };
