@@ -1,6 +1,6 @@
-import { useContext, useState } from 'react';
+import { useCallback } from 'react';
 
-import { Box, TextField, MenuItem, IconButton } from '@mui/material';
+import { Box, MenuItem, IconButton } from '@mui/material';
 import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
 import { grey } from '@mui/material/colors';
 import FormTextField from './FormTextField';
@@ -33,6 +33,8 @@ const quantitySelectors = [
 ];
 
 const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) => {
+  const handleDelete = useCallback(() => handleFieldDelete(index), [index, handleFieldDelete]);
+
   return (
     <Box
       sx={{
@@ -45,7 +47,6 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
       <FormTextField
         name={`ingredients.${index}.title`}
         control={control}
-        defaultValue={ingredient.title}
         label='Название'
         variant='standard'
         fullWidth
@@ -61,7 +62,6 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
         <FormTextField
           name={`ingredients.${index}.quantity`}
           control={control}
-          defaultValue={ingredient.quantity}
           label={ingredient.units}
           fullWidth
           sx={{ minWidth: '60px', mr: 1 }}
@@ -70,7 +70,6 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
           name={`ingredients.${index}.units`}
           control={control}
           select
-          defaultValue={ingredient.units}
           label={ingredient.units}
           fullWidth
           sx={{ minWidth: '80px' }}>
@@ -80,7 +79,7 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
             </MenuItem>
           ))}
         </FormTextField>
-        <IconButton title='Удалить' onClick={() => handleFieldDelete(index)} color='primary' size='large'>
+        <IconButton title='Удалить' onClick={handleDelete} color='primary' size='large'>
           <RemoveCircleOutlineOutlinedIcon fontSize='large' />
         </IconButton>
       </Box>

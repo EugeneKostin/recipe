@@ -5,7 +5,6 @@ import { Box, Collapse, IconButton } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
 import { useFieldArray } from 'react-hook-form';
 import FormIngredientItem from './FormIngredientItem';
-import { useEffect } from 'react';
 
 const FormIngredientField = ({ control }) => {
   const { fields, append, remove } = useFieldArray({
@@ -14,6 +13,7 @@ const FormIngredientField = ({ control }) => {
   });
 
   const handleAddField = () => {
+    console.log('add');
     append({
       title: '',
       quantity: '',
@@ -24,20 +24,17 @@ const FormIngredientField = ({ control }) => {
   const throttledAddButtonClick = throttle(handleAddField, 5000);
 
   const handleFieldDelete = (removedFieldIndex) => {
+    console.log('remove');
     fields.length > 1 && remove(removedFieldIndex);
   };
 
+  console.log('render');
   return (
     <Box>
       <TransitionGroup>
         {fields.map((ingredient, index) => (
           <Collapse key={ingredient.id}>
-            <FormIngredientItem
-              control={control}
-              ingredient={ingredient}
-              index={index}
-              handleFieldDelete={handleFieldDelete}
-            />
+            <FormIngredientItem {...{ control, index, ingredient, handleFieldDelete }} />
           </Collapse>
         ))}
       </TransitionGroup>
@@ -47,7 +44,7 @@ const FormIngredientField = ({ control }) => {
           justifyContent: 'center',
           mt: 2,
         }}>
-        <IconButton title='Добавить' onClick={throttledAddButtonClick} color='primary' size='large'>
+        <IconButton title='Добавить' onClick={handleAddField} color='primary' size='large'>
           <AddCircleOutlineOutlinedIcon fontSize='large' />
         </IconButton>
       </Box>

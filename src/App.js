@@ -2,7 +2,7 @@ import { CssBaseline } from '@mui/material';
 import { AppRouter } from './components/AppRouter';
 import { MuiGlobalTheme } from './components/MuiGlobalTheme';
 
-export const App = () => {
+const App = () => {
   return (
     <MuiGlobalTheme>
       <CssBaseline />
@@ -10,3 +10,5 @@ export const App = () => {
     </MuiGlobalTheme>
   );
 };
+
+export default App

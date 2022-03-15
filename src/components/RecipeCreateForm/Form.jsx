@@ -36,14 +36,14 @@ const schema = yup
   .required();
 
 const defaultValues = {
-  title: '',
-  cookingTime: '',
+  title: '1',
+  cookingTime: '1',
   portionsNum: 3,
   instruction: '',
   //   image: '',
   ingredients: [
     {
-      title: '',
+      title: '123',
       quantity: '',
       units: 'гр.',
     },

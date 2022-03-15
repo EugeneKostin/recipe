@@ -5,12 +5,12 @@ import { PAGE_RECIPES_PATH, PAGE_RECIPES_DEPAILS_PATH, PAGE_CREATE_PATH } from '
 
 export const routes = [
     {
-        path: PAGE_RECIPES_PATH,
-        element: <Recipes />,
-    },
-    {
         path: PAGE_CREATE_PATH,
         element: <Create />,
+    },
+    {
+        path: PAGE_RECIPES_PATH,
+        element: <Recipes />,
     },
     {
         path: PAGE_RECIPES_DEPAILS_PATH,

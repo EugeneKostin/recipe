@@ -3,9 +3,8 @@ import { routes } from '../routes';
 import { Layout } from './Layout';
 
 export const AppRouter = () => {
-  console.log(routes);
   return (
-    <BrowserRouter basename={window.location.pathname || ''}>
+    <BrowserRouter /*basename={window.location.pathname || ''} */>
       <Routes>
         <Route element={<Layout />}>
           {routes.map((route) => (
