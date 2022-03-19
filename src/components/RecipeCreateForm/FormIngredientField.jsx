@@ -1,19 +1,25 @@
-import { TransitionGroup } from 'react-transition-group';
 import throttle from 'lodash/throttle';
 
-import { Box, Collapse, IconButton } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import AddCircleOutlineOutlinedIcon from '@mui/icons-material/AddCircleOutlineOutlined';
-import { useFieldArray } from 'react-hook-form';
+import { useFieldArray, useFormContext } from 'react-hook-form';
 import FormIngredientItem from './FormIngredientItem';
+import { useEffect, useMemo } from 'react';
 
-const FormIngredientField = ({ control }) => {
+const FormIngredientField = () => {
+  const { control } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'ingredients',
   });
 
+  useEffect(() => {
+    return () => {
+      throttledAddButtonClick.cancel();
+    };
+  }, []);
+
   const handleAddField = () => {
-    console.log('add');
     append({
       title: '',
       quantity: '',
@@ -21,30 +27,24 @@ const FormIngredientField = ({ control }) => {
     });
   };
 
-  const throttledAddButtonClick = throttle(handleAddField, 5000);
+  const throttledAddButtonClick = useMemo(() => throttle(handleAddField, 500), []);
 
   const handleFieldDelete = (removedFieldIndex) => {
-    console.log('remove');
-    fields.length > 1 && remove(removedFieldIndex);
+    remove(removedFieldIndex);
   };
 
-  console.log('render');
   return (
     <Box>
-      <TransitionGroup>
-        {fields.map((ingredient, index) => (
-          <Collapse key={ingredient.id}>
-            <FormIngredientItem {...{ control, index, ingredient, handleFieldDelete }} />
-          </Collapse>
-        ))}
-      </TransitionGroup>
+      {fields.map((ingredient, index) => (
+        <FormIngredientItem key={ingredient.id} {...{ control, index, ingredient, handleFieldDelete }} />
+      ))}
       <Box
         sx={{
           display: 'flex',
           justifyContent: 'center',
           mt: 2,
         }}>
-        <IconButton title='Добавить' onClick={handleAddField} color='primary' size='large'>
+        <IconButton title='Добавить' onClick={throttledAddButtonClick} color='primary' size='large'>
           <AddCircleOutlineOutlinedIcon fontSize='large' />
         </IconButton>
       </Box>

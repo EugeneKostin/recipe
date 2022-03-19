@@ -2,7 +2,7 @@ import { styled } from '@mui/system';
 import { ButtonGroup, IconButton } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
-import { Controller } from 'react-hook-form';
+import { Controller, useFormContext } from 'react-hook-form';
 
 const StyledInput = styled('input')(({ theme }) => ({
   border: 'none',
@@ -15,7 +15,8 @@ const StyledInput = styled('input')(({ theme }) => ({
   fontFamily: theme.typography.fontFamily,
 }));
 
-const FormInputNumWithControls = ({ name, control, setValue, defaultValue, ...props }) => {
+const FormInputNumWithControls = ({ name, defaultValue, ...props }) => {
+  const { control, setValue } = useFormContext();
   return (
     <Controller
       name={name}

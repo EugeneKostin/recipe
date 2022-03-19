@@ -1,14 +1,7 @@
 import { useState } from 'react';
-import { Container, Typography, Button, TextField, InputAdornment, ButtonGroup, IconButton, Box } from '@mui/material';
-import { IngredientField } from '../components/IngredientField';
-import { CreateRecipeFormContext } from '../context';
 import { FormValidator } from '../utils/formValidator';
 import { removeSpaces } from '../utils/removeSpaces';
 import { addDocument } from '../API/firestore';
-import { Input } from '../components/RecipeCreateForm/FormInputNumWithControls';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
-import ImageUpload from '../components/ImageUpload';
 import { uploadImage, imageRef } from '../API/storage';
 import Form from '../components/RecipeCreateForm/Form';
 
