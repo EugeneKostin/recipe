@@ -3,15 +3,14 @@ import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { Controller, useFormContext } from 'react-hook-form';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFormContext } from 'react-hook-form';
+import { useEffect, useMemo, useState } from 'react';
 import ImageUploadIcon from './ImageUploadIcon';
 import Image from '../../UI/Image';
 import UploadProgress from './UploadProgress';
 import CloseIcon from '@mui/icons-material/Close';
-import { uploadImage } from '../../../API/storage';
 import { getPrettyFileSize } from '../../../utils/filleSizeConverter';
-import { imageUploadTask, getUploadTaskState, storageRef, deleteImage } from '../../../API/storage';
+import { storageRef, deleteImage } from '../../../API/storage';
 import { uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const ImageUploadBar = ({ imageData }) => {
@@ -24,12 +23,14 @@ const ImageUploadBar = ({ imageData }) => {
   });
 
   useEffect(() => setUpload(false), [imageData]);
-  useEffect(() => console.log(uploadData), [uploadData]);
+  useEffect(() => {
+    // mb handle error state
+    console.log(uploadData);
+  }, [uploadData]);
 
   const handleUploadClick = () => {
     setUpload(true);
     const uploadTask = uploadBytesResumable(storageRef(imageData), imageData);
-    console.log(uploadTask);
     uploadTask.on(
       'state_changed',
       (snapshot) => {
@@ -43,6 +44,8 @@ const ImageUploadBar = ({ imageData }) => {
           case 'running':
             setUploadData((prev) => ({ ...prev, status: 'running' }));
             break;
+          default:
+            setUploadData((prev) => ({ ...prev, status: snapshot.state }));
         }
       },
       (error) => {
@@ -51,10 +54,7 @@ const ImageUploadBar = ({ imageData }) => {
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
           setUploadData((prev) => ({ ...prev, status: 'successful' }));
-          console.log('File available at', downloadURL, uploadTask.snapshot.ref);
-          console.log(imageData);
           setFormValue('imageURL', downloadURL);
-          return downloadURL;
         });
       }
     );
@@ -69,7 +69,7 @@ const ImageUploadBar = ({ imageData }) => {
     }
   };
 
-  const fileSize = useMemo(() => getPrettyFileSize(imageData?.size) || '', [imageData]);
+  const fileSize = useMemo(() => getPrettyFileSize(imageData?.size) || null, [imageData]);
 
   return (
     <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mt: 3 }}>
@@ -172,8 +172,6 @@ const ImageUpload = ({ ...props }) => {
 
   const handleOpen = () => setDialogOpen(true);
   const handleClose = () => {
-    //set form data on close
-    console.log('close');
     setDialogOpen(false);
     setImageData(null);
   };
