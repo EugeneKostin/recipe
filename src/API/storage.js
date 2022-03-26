@@ -1,10 +1,10 @@
 import { storage } from './firestore-connection';
-import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
+import { ref, uploadBytesResumable, getDownloadURL, deleteObject } from "firebase/storage";
 
 export const uploadImage = (image, setState) => {
     const storageRef = ref(storage, `recipes_images/${image.name}`);
-    console.log(storageRef);
     const uploadTask = uploadBytesResumable(storageRef, image);
+    console.log(uploadTask);
     uploadTask.on('state_changed',
         (snapshot) => {
             const progress = parseInt((snapshot.bytesTransferred / snapshot.totalBytes) * 100);
@@ -18,7 +18,7 @@ export const uploadImage = (image, setState) => {
                     break;
             }
         },
-        (error, snapshot) => {
+        (error) => {
             setState((prev) => ({ ...prev, error, status: 'error' }))
         },
         () => {
@@ -34,4 +34,22 @@ export const uploadImage = (image, setState) => {
 
 }
 
-export const imageRef = (image) => ref(storage, `recipes_images/${image.name}`);
+export const getUploadTaskState = (uploadTask, setState) => {
+    uploadTask.on('state_changed', (snapshot) => {
+        setState(prev => ({ ...prev, state: snapshot.state }))
+    })
+}
+
+export const imageUploadTask = (image) => image && uploadBytesResumable(storageRef(image), `recipes_images/${image.name}`);
+
+
+export const storageRef = (image) => ref(storage, `recipes_images/${image.name}`);
+
+
+export const deleteImage = async (image) => {
+    try {
+        await deleteObject(storageRef(image))
+    } catch (e) {
+        throw e;
+    }
+}
