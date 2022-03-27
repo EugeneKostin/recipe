@@ -50,7 +50,7 @@ export const MuiGlobalTheme = ({ children }) => {
         letterSpacing: '0.02em',
       },
       body2: {
-        fontSize: 16,
+        fontSize: 14,
         letterSpacing: '0.02em',
       },
       button: {

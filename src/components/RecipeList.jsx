@@ -3,39 +3,6 @@ import { RecipeCard } from './RecipeCard';
 import { getAllDocuments } from '../API/firestore';
 import { Grid } from '@mui/material';
 
-const testRecipes = [
-  {
-    id: 1,
-    title: 'title 1',
-    products: [
-      {
-        name: 'potato',
-        quantity: 5,
-      },
-      {
-        name: 'tomato',
-        quantity: 3,
-      },
-    ],
-    description: '1 recipe desc',
-  },
-  {
-    id: 2,
-    title: 'title 2',
-    products: [
-      {
-        name: 'carot',
-        quantity: 3,
-      },
-      {
-        name: 'onion',
-        quantity: 7,
-      },
-    ],
-    description: '2 recipe desc',
-  },
-];
-
 const RecipeList = () => {
   const [recipes, setRecipes] = useState([]);
 
@@ -47,8 +14,6 @@ const RecipeList = () => {
         setRecipes((prev) => [...prev, { id: doc.id, ...doc.data() }]);
       });
     })();
-
-    // setRecipes(testRecipes);
   }, []);
 
   // const handleDelete = async (id) => {

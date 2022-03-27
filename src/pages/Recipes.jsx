@@ -5,8 +5,6 @@ import React, { Suspense } from 'react';
 const RecipeList = React.lazy(() => import('../components/RecipeList'));
 
 export const Recipes = () => {
-  console.log('loop');
-
   return (
     <Container
       maxWidth='xl'

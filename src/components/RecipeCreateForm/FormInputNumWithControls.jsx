@@ -7,11 +7,11 @@ import { Controller, useFormContext } from 'react-hook-form';
 const StyledInput = styled(InputBase)(({ theme }) => ({
   border: 'none',
   width: 30,
-  height: '100%',
-  padding: 0,
+
   outline: 'none',
   '& .MuiInputBase-input': {
     textAlign: 'center',
+    padding: '15.5px 0',
   },
 }));
 
@@ -37,7 +37,6 @@ const FormInputNumWithControls = ({ name, defaultValue, sx, ...props }) => {
             border: 1,
             borderRadius: 1,
             borderColor: 'rgba(0, 0, 0, 0.23)',
-            height: 56,
             alignItems: 'center',
             justifyContent: 'space-between',
             ...sx,

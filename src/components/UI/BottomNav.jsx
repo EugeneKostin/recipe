@@ -1,10 +1,4 @@
-import { useState } from 'react';
-import {
-  Box,
-  BottomNavigation,
-  BottomNavigationAction,
-  Paper,
-} from '@mui/material';
+import { Box, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
 
 export const BottomNav = ({ menuItems }) => {
@@ -19,8 +13,7 @@ export const BottomNav = ({ menuItems }) => {
         left: 0,
         right: 0,
       }}
-      elevation={3}
-    >
+      elevation={3}>
       <Box sx={{ width: '100%' }}>
         <BottomNavigation showLabels>
           {menuItems.map((page) => (
