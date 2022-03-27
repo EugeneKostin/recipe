@@ -1,4 +1,3 @@
-import { useCallback } from 'react';
 import { Typography, Button, InputAdornment, Box, Grid } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -28,14 +27,14 @@ const schema = yup
   .required();
 
 const defaultValues = {
-  title: '1',
-  cookingTime: '1',
+  title: '',
+  cookingTime: '',
   portionsNum: 3,
   instruction: '',
   imageURL: '',
   ingredients: [
     {
-      title: '123',
+      title: '',
       quantity: '',
       units: 'гр.',
     },
@@ -52,13 +51,13 @@ const Form = () => {
     defaultValues,
   });
 
-  const onSubmit = useCallback((data) => {
+  const onSubmit = (data) => {
     console.log('data to send =>', data);
     (async () => {
       await addDocument(data);
       console.log('created');
     })();
-  });
+  };
 
   return (
     <FormProvider {...methods}>
@@ -69,25 +68,42 @@ const Form = () => {
           fullWidth
           label='Название блюда'
           variant='outlined'
-          sx={{ mt: 5 }}
+          sx={{ mt: 6 }}
         />
-        <Grid container sx={{ mt: 5, justifyContent: 'space-between' }}>
-          <FormTextField
-            name='cookingTime'
-            defaultValue={defaultValues.cookingTime}
-            label='Время готовки'
-            variant='outlined'
-            InputProps={{
-              endAdornment: <InputAdornment position='start'>мин.</InputAdornment>,
-            }}
-          />
-          <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <Grid
+          container
+          columnSpacing={{ xs: 1, sm: 2, md: 4 }}
+          wrap='nowrap'
+          sx={{ mt: 4, justifyContent: { xs: 'space-between', sm: 'flex-start' } }}>
+          <Grid item xs={6} sx={{ flexDirection: 'column' }}>
+            <Typography variant='body1'>Время готовки</Typography>
+            <FormTextField
+              sx={{ mt: 1, width: 'min(100%, 144px)' }}
+              name='cookingTime'
+              defaultValue={defaultValues.cookingTime}
+              placeholder='60'
+              variant='outlined'
+              InputProps={{
+                endAdornment: <InputAdornment position='start'>мин.</InputAdornment>,
+              }}
+            />
+          </Grid>
+          <Grid
+            item
+            xs={6}
+            sx={{ flexDirection: 'column', display: 'flex', alignItems: { xs: 'flex-end', sm: 'flex-start' } }}>
             <Typography variant='body1'>Количество порций</Typography>
-            <FormInputNumWithControls name='portionsNum' defaultValue={defaultValues.portionsNum} />
-          </Box>
+            <FormInputNumWithControls name='portionsNum' sx={{ mt: 1 }} defaultValue={defaultValues.portionsNum} />
+          </Grid>
         </Grid>
-        <FormIngredientField />
-        <Typography variant='body1' mt={5}>
+        <Box mt={6}>
+          <Typography variant='h2' component='h2'>
+            Ингредиенты
+          </Typography>
+          <FormIngredientField />
+        </Box>
+
+        <Typography variant='h2' component='h2' mt={6}>
           Инструкция приготовления
         </Typography>
         <FormTextField
@@ -99,11 +115,14 @@ const Form = () => {
           fullWidth
           sx={{ mt: 2 }}
         />
-        <Typography variant='body1' mt={5}>
+        <Typography variant='h2' component='h2' mt={6}>
           Изображение рецепта
         </Typography>
         <ImageUpload sx={{ mt: 2 }} />
-        <Button sx={{ display: 'block', mt: 8, mx: 'auto' }} type='submit' variant='contained'>
+        <Button
+          sx={{ display: 'block', mt: 8, mx: 'auto', width: 'min(90%, 350px)', height: 48 }}
+          type='submit'
+          variant='contained'>
           Создать
         </Button>
       </form>

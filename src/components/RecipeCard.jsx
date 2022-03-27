@@ -1,6 +1,7 @@
-import { Card, Box, CardContent, CardMedia, Typography, Chip } from '@mui/material';
+import { Card, Box, CardContent, CardMedia } from '@mui/material';
 import { CardActionArea } from '@mui/material';
 import { NavLink as RouterLink } from 'react-router-dom';
+import TextOverflowWrapper from './UI/TextOverflowWrapper';
 
 export const RecipeCard = ({ recipe }) => {
   return (
@@ -9,17 +10,28 @@ export const RecipeCard = ({ recipe }) => {
         <CardMedia
           component='img'
           height='180'
+          loading='lazy'
           image={recipe.imageURL ? recipe.imageURL : '/recipe/images/recipe.png'}
           alt='recipe'
         />
         <CardContent>
-          <Typography gutterBottom variant='h5' component='div'>
+          <TextOverflowWrapper
+            variant='subtitle1'
+            component='span'
+            multiline='true'
+            overflowColor='#fff'
+            sx={{ height: { xs: 35, sm: 45, md: 55 } }}>
             {recipe.title}
-          </Typography>
+          </TextOverflowWrapper>
+
           <Box mt={1}>
-            <Typography variant='caption' sx={{ lineHeight: 1, fontWeight: 'fontWeightLight' }}>
+            <TextOverflowWrapper
+              variant='caption'
+              multiline='true'
+              overflowColor='#fff'
+              sx={{ fontWeight: 'fontWeightLight', height: { xs: 35, sm: 40 } }}>
               {recipe.ingredients.map((ingredient) => ingredient.title + ', ')}
-            </Typography>
+            </TextOverflowWrapper>
           </Box>
         </CardContent>
       </CardActionArea>

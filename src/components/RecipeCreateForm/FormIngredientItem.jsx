@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useState } from 'react';
-import { Box, MenuItem, IconButton, Collapse } from '@mui/material';
-import RemoveCircleOutlineOutlinedIcon from '@mui/icons-material/RemoveCircleOutlineOutlined';
+import { Box, MenuItem, IconButton, Collapse, Paper } from '@mui/material';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import FormTextField from './FormTextField';
 
 const quantitySelectors = [
@@ -45,13 +45,13 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
 
   return (
     <Collapse in={mounted} timeout={transitionDuration}>
-      <Box
+      <Paper
+        elevation={1}
+        // variant='outlined'
         sx={{
           mt: 2,
-          px: 1,
-          py: 2,
-          bgcolor: 'grey.50',
-          borderRadius: '5px',
+          px: { xs: 1, md: 2 },
+          py: { xs: 2, md: 3 },
         }}>
         <FormTextField
           name={`ingredients.${index}.title`}
@@ -89,10 +89,10 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
             ))}
           </FormTextField>
           <IconButton title='Удалить' onClick={handleTransitionedUnmount} color='primary' size='large'>
-            <RemoveCircleOutlineOutlinedIcon fontSize='large' />
+            <DeleteOutlineIcon fontSize='large' />
           </IconButton>
         </Box>
-      </Box>
+      </Paper>
     </Collapse>
   );
 };

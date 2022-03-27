@@ -12,9 +12,8 @@ export const Recipes = () => {
       maxWidth='xl'
       sx={{
         pb: 8,
-      }}
-    >
-      <Typography my={4} variant='h3' component='h1' color='textSecondary'>
+      }}>
+      <Typography my={6} variant='h1' component='h1'>
         Рецепты
       </Typography>
       <Suspense fallback={<Loader />}>

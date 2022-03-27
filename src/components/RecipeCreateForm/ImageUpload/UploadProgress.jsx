@@ -1,28 +1,11 @@
 import { Box, Grid, LinearProgress, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
-
-const TextOverflowBox = styled(Box)(({ theme }) => ({
-  position: 'relative',
-  whiteSpace: 'nowrap',
-  width: '100%',
-  textOverflow: 'clip',
-  overflow: 'hidden',
-  '&:before': {
-    content: "''",
-    width: '40px',
-    height: '100%',
-    position: 'absolute',
-    right: 0,
-    top: 0,
-    background: `linear-gradient(90deg, transparent, ${theme.palette.grey[50]})`,
-  },
-}));
+import TextOverflowWrapper from '../../UI/TextOverflowWrapper';
 
 export default function UploadProgress({ progress = 0, fileName, fileSize }) {
   return (
     <Grid container direction='column'>
       <Box sx={{ width: '80%' }}>
-        <TextOverflowBox variant='body1'>{fileName}</TextOverflowBox>
+        <TextOverflowWrapper variant='body1'>{fileName}</TextOverflowWrapper>
       </Box>
       <LinearProgress sx={{ borderRadius: 1 }} variant='determinate' value={progress} />
       <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
