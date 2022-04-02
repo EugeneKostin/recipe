@@ -1,30 +1,40 @@
 import { Typography, Button, InputAdornment, Box, Grid } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
+import { yupResolver  } from '@hookform/resolvers/yup';
 import * as yup from 'yup';
 import FormTextField from './FormTextField';
 import FormInputNumWithControls from './FormInputNumWithControls';
 import FormIngredientField from './FormIngredientField';
 import ImageUpload from './ImageUpload/ImageUpload';
 import { addDocument } from '../../API/firestore';
+import { FORM_REQUIRED_MESSAGE, FORM_POSITIVE_MESSAGE, FORM_NUMBER_MIN_MESSAGE, FORM_NUMBER_TYPEERROR_MESSAGE } from '../../utils/constants'
+
+yup.setLocale({
+  mixed: {
+    required: FORM_REQUIRED_MESSAGE,
+  },
+  number: {
+    min: FORM_NUMBER_MIN_MESSAGE+' ${min}',
+    positive: FORM_POSITIVE_MESSAGE
+  },
+});
 
 const schema = yup
   .object({
     title: yup.string().required().trim(),
-    cookingTime: yup.number().positive().integer().required(),
-    portionsNum: yup.number().positive().integer().min(1),
+    cookingTime: yup.number().typeError(FORM_NUMBER_TYPEERROR_MESSAGE).required().positive().integer().transform((value, originalValue) => (originalValue === '' ? undefined : value)),
+    portionsNum: yup.number().typeError(FORM_NUMBER_TYPEERROR_MESSAGE).required().positive().integer().min(1),
     instruction: yup.string(),
     imageURL: yup.string(),
     createdOn: yup.date(),
     ingredients: yup.array().of(
       yup.object().shape({
-        title: yup.string().trim(),
-        quantity: yup.string().trim(),
+        title: yup.string().required().trim(),
+        quantity: yup.string().required().trim(),
         units: yup.string(),
       })
-    ),
+    ).min(1, "Ну добавь хотя бы один ингредиент")
   })
-  .required();
 
 const defaultValues = {
   title: '',
@@ -36,7 +46,7 @@ const defaultValues = {
     {
       title: '',
       quantity: '',
-      units: 'гр.',
+      units: '',
     },
   ],
   createdOn: new Date(),
@@ -78,7 +88,7 @@ const Form = () => {
           <Grid item xs={6} sx={{ flexDirection: 'column' }}>
             <Typography variant='body1'>Время готовки</Typography>
             <FormTextField
-              sx={{ mt: 1, width: 'min(100%, 144px)' }}
+              sx={{ mt: 1, width: {xs: 'min(100%, 144px)', sm: '50%'} }}
               name='cookingTime'
               defaultValue={defaultValues.cookingTime}
               placeholder='60'

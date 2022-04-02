@@ -1,11 +1,14 @@
-import { Typography, Container, Box, Paper } from '@mui/material';
+import { Typography, Container, Box, Paper, List, ListItem, Button, ListItemButton } from '@mui/material';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
 import { getDocumentById } from '../API/firestore';
 import Image from '../components/UI/Image';
 import { ReactComponent as ClockIcon } from '../static/icons/clock.svg';
 import { ReactComponent as DishIcon } from '../static/icons/dish.svg';
+import CheckBox from '../components/UI/CheckBox';
 import { styled, alpha } from '@mui/material/styles';
+import RecipeImg from '../static/images/recipe.png';
 
 const StyledImageWrapper = styled(Image)(({ theme }) => ({
   height: 250,
@@ -63,7 +66,7 @@ export const RecipeDetails = memo(() => {
     <Container maxWidth='md' disableGutters>
       {recipe && (
         <>
-          <StyledImageWrapper src={recipe.imageURL} sx={{ borderRadius: '0 0 25px 25px' }} />
+          <StyledImageWrapper src={recipe.imageURL ? recipe.imageURL : RecipeImg} alt='recipe' sx={{ borderRadius: '0 0 25px 25px' }} />
           <StyledGlassWrapper>
             <Typography variant='h1' sx={{ textAlign: 'center' }}>
               {recipe.title}
@@ -86,13 +89,37 @@ export const RecipeDetails = memo(() => {
               </Box>
             </Box>
           </StyledGlassWrapper>
-          <Container>
-            <Box sx={{ mt: 6 }}>
+          <Container sx={{ mt: 6 }}>
               <Typography variant='h2'>Ингредиенты</Typography>
-            </Box>
+              <List sx={{mt: 3, p: 0}}>
+                {recipe.ingredients.map((ingredient) =>
+                <IngredientListItem key={ingredient.id} ingredient={ingredient}/>
+                )}
+              </List>
+            <Button variant="outlined" startIcon={<ContentCopyIcon />} sx={{mt: 2}}>Неотмеченные</Button>
+          </Container>
+          <Container sx={{ mt: 6 }}>
+          <Typography variant='h2'>Инструкция приготовления</Typography>
+          <Typography variant='body2' sx={{mt: 3}}>{recipe.instruction}</Typography>
           </Container>
         </>
       )}
     </Container>
   );
 });
+
+
+const IngredientListItem = ({ingredient}) => {
+  const [checked, setChecked] = useState(false)
+  return (
+    <ListItem disablePadding divider>
+      <ListItemButton role={undefined} onClick={() => setChecked(!checked)} dense sx={{px: 0, py: 2}}>
+      <Box sx={{display: 'flex', alignItems: 'center', width: '100%'}}>
+        <CheckBox disableRipple checked={checked} />
+        <Typography sx={{ml: 1.5, fontWeight: 'fontWeightMedium'}}>{ingredient.title}</Typography>
+        <Typography color= {checked ?'primary' : 'text'} sx={{ml: 'auto'}}>{ingredient.quantity} {(ingredient.units === 'другое') ? '' : ingredient.units}</Typography>
+      </Box>
+      </ListItemButton>
+    </ListItem>
+  )
+}

@@ -19,13 +19,13 @@ export const RecipeCard = memo(({ recipe }) => {
         <CardMedia sx={{ height: 180 }}>
           <Image src={recipe.imageURL ? recipe.imageURL : RecipeImg} alt='recipe' />
         </CardMedia>
-        <CardContent sx={{ height: 200, display: 'flex', flexDirection: 'column' }}>
+        <CardContent sx={{ height: {xs: 180, md: 200}, display: 'flex', flexDirection: 'column' }}>
           <TextOverflowWrapper
             variant='subtitle1'
             component='span'
             multiline='true'
             overflowColor='#fff'
-            sx={{ maxHeight: { xs: 35, sm: 45, md: 55 } }}>
+            sx={{ maxHeight: { xs: 40, sm: 45, md: 55 } }}>
             {recipe.title}
           </TextOverflowWrapper>
           <Box sx={{ mt: 1 }}>
@@ -42,7 +42,7 @@ export const RecipeCard = memo(({ recipe }) => {
               </Typography>
             </Box>
           </Box>
-          <Box mt={1}>
+          <Box my={1}>
             <TextOverflowWrapper
               variant='body2'
               multiline='true'

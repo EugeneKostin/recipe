@@ -1,5 +1,5 @@
 import { styled } from '@mui/system';
-import { ButtonGroup, IconButton, InputBase } from '@mui/material';
+import { ButtonGroup, IconButton, InputBase, FormHelperText  } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { Controller, useFormContext } from 'react-hook-form';
@@ -29,7 +29,8 @@ const FormInputNumWithControls = ({ name, defaultValue, sx, ...props }) => {
       name={name}
       control={control}
       defaultValue={defaultValue}
-      render={({ field }) => (
+      render={({ field, fieldState }) => (
+        <>
         <ButtonGroup
           aria-label='portions field'
           {...props}
@@ -41,7 +42,7 @@ const FormInputNumWithControls = ({ name, defaultValue, sx, ...props }) => {
             justifyContent: 'space-between',
             ...sx,
           }}>
-          <StyledIconButton aria-label='reduce' onClick={() => setValue(name, field.value - 1)}>
+          <StyledIconButton aria-label='reduce' disabled={field.value < 2} onClick={() => setValue(name, field.value - 1)}>
             <RemoveIcon />
           </StyledIconButton>
           <StyledInput {...field} type='text' readOnly />
@@ -49,6 +50,8 @@ const FormInputNumWithControls = ({ name, defaultValue, sx, ...props }) => {
             <AddIcon />
           </StyledIconButton>
         </ButtonGroup>
+        <FormHelperText error>{fieldState?.error?.message}</FormHelperText>
+        </>
       )}
     />
   );

@@ -65,13 +65,12 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
           sx={{
             display: 'flex',
             justifyContent: 'space-between',
-            alignItems: 'center',
             mt: 2,
           }}>
           <FormTextField
             name={`ingredients.${index}.quantity`}
             control={control}
-            label={ingredient.units}
+            label='Кол-во'
             fullWidth
             sx={{ minWidth: '60px', mr: 1 }}
           />
@@ -79,7 +78,7 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
             name={`ingredients.${index}.units`}
             control={control}
             select
-            label={ingredient.units}
+            label='единицы'
             fullWidth
             sx={{ minWidth: '80px' }}>
             {quantitySelectors.map((item) => (
@@ -88,7 +87,7 @@ const FormIngredientItem = ({ ingredient, index, control, handleFieldDelete }) =
               </MenuItem>
             ))}
           </FormTextField>
-          <IconButton title='Удалить' onClick={handleTransitionedUnmount} color='primary' size='large'>
+          <IconButton title='Удалить' onClick={handleTransitionedUnmount} size='large' sx={{color: 'primary.main', height: 'fit-content'}}>
             <DeleteOutlineIcon fontSize='large' />
           </IconButton>
         </Box>
