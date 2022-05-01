@@ -1,4 +1,4 @@
-import { Typography, Container, Box, Paper, List, ListItem, Button, ListItemButton } from '@mui/material';
+import { Typography, Container, Box, Paper, List, ListItem, Button, ListItemButton, Tooltip } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { useState, useEffect, memo, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
@@ -9,9 +9,12 @@ import { ReactComponent as DishIcon } from '../static/icons/dish.svg';
 import CheckBox from '../components/UI/CheckBox';
 import { styled, alpha } from '@mui/material/styles';
 import RecipeImg from '../static/images/recipe.png';
+import uniqueId from 'lodash/uniqueId';
+import { PORTIONS_NUM_WORDS, INGREDIENT_NUM_WORDS } from '../utils/constants';
+import { getNumWord } from '../utils/helpers';
 
 const StyledImageWrapper = styled(Image)(({ theme }) => ({
-  height: 250,
+  height: 220,
   position: 'relative',
   '&:before': {
     content: "''",
@@ -21,7 +24,8 @@ const StyledImageWrapper = styled(Image)(({ theme }) => ({
     right: 0,
     bottom: 0,
     opacity: 0.4,
-    background: `linear-gradient(-45deg, ${theme.palette.primary.main}, ${theme.palette.background.default})`,
+    // background: `linear-gradient(0deg, ${theme.palette.primary.main}, ${theme.palette.background.default} 70%)`,
+    background: `linear-gradient(0deg, ${theme.palette.primary.main}, transparent 60%)`,
   },
   [theme.breakpoints.up('sm')]: {
     height: 350,
@@ -66,41 +70,51 @@ export const RecipeDetails = memo(() => {
     <Container maxWidth='md' disableGutters>
       {recipe && (
         <>
-          <StyledImageWrapper src={recipe.imageURL ? recipe.imageURL : RecipeImg} alt='recipe' sx={{ borderRadius: '0 0 25px 25px' }} />
+          <StyledImageWrapper
+            src={recipe.imageURL ? recipe.imageURL : RecipeImg}
+            alt='recipe'
+            sx={{ borderRadius: { xs: 2, md: 6 }, mt: 4 }}
+          />
           <StyledGlassWrapper>
             <Typography variant='h1' sx={{ textAlign: 'center' }}>
               {recipe.title}
             </Typography>
             <Typography variant='body2' sx={{ textAlign: 'center', mt: 1 }}>
-              {ingredientsNum} ингредиентов
+              {ingredientsNum} {getNumWord(ingredientsNum, INGREDIENT_NUM_WORDS)}
             </Typography>
             <Box sx={{ mt: 2, display: 'flex', justifyContent: 'space-around' }}>
               <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
                 <ClockIcon height={20} width={20} />
-                <Typography ml={0.5} variant='body2' component='span'>
+                <Typography ml={1} variant='body2' component='span'>
                   {recipe.cookingTime} мин.
                 </Typography>
               </Box>
               <Box sx={{ display: 'inline-flex', alignItems: 'center', ml: 1 }}>
                 <DishIcon height={20} width={20} />
-                <Typography ml={0.5} variant='body2' component='span'>
-                  {recipe.portionsNum} порций
+                <Typography ml={1} variant='body2' component='span'>
+                  {recipe.portionsNum} {getNumWord(recipe.portionsNum, PORTIONS_NUM_WORDS)}
                 </Typography>
               </Box>
             </Box>
           </StyledGlassWrapper>
           <Container sx={{ mt: 6 }}>
-              <Typography variant='h2'>Ингредиенты</Typography>
-              <List sx={{mt: 3, p: 0}}>
-                {recipe.ingredients.map((ingredient) =>
-                <IngredientListItem key={ingredient.id} ingredient={ingredient}/>
-                )}
-              </List>
-            <Button variant="outlined" startIcon={<ContentCopyIcon />} sx={{mt: 2}}>Неотмеченные</Button>
+            <Typography variant='h2'>Ингредиенты</Typography>
+            <List sx={{ mt: 3, p: 0 }}>
+              {recipe.ingredients.map((ingredient) => (
+                <IngredientListItem key={uniqueId()} ingredient={ingredient} />
+              ))}
+            </List>
+            <Tooltip title='Скопировать неотмеченные ингредиенты'>
+              <Button variant='outlined' startIcon={<ContentCopyIcon />} sx={{ mt: 2 }}>
+                Неотмеченные
+              </Button>
+            </Tooltip>
           </Container>
           <Container sx={{ mt: 6 }}>
-          <Typography variant='h2'>Инструкция приготовления</Typography>
-          <Typography variant='body2' sx={{mt: 3}}>{recipe.instruction}</Typography>
+            <Typography variant='h2'>Инструкция приготовления</Typography>
+            <Typography variant='body2' sx={{ mt: 3 }}>
+              {recipe.instruction}
+            </Typography>
           </Container>
         </>
       )}
@@ -108,18 +122,19 @@ export const RecipeDetails = memo(() => {
   );
 });
 
-
-const IngredientListItem = ({ingredient}) => {
-  const [checked, setChecked] = useState(false)
+const IngredientListItem = ({ ingredient }) => {
+  const [checked, setChecked] = useState(false);
   return (
     <ListItem disablePadding divider>
-      <ListItemButton role={undefined} onClick={() => setChecked(!checked)} dense sx={{px: 0, py: 2}}>
-      <Box sx={{display: 'flex', alignItems: 'center', width: '100%'}}>
-        <CheckBox disableRipple checked={checked} />
-        <Typography sx={{ml: 1.5, fontWeight: 'fontWeightMedium'}}>{ingredient.title}</Typography>
-        <Typography color= {checked ?'primary' : 'text'} sx={{ml: 'auto'}}>{ingredient.quantity} {(ingredient.units === 'другое') ? '' : ingredient.units}</Typography>
-      </Box>
+      <ListItemButton role={undefined} onClick={() => setChecked(!checked)} dense sx={{ px: 0, py: 2 }}>
+        <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', px: { md: 2 } }}>
+          <CheckBox disableRipple checked={checked} />
+          <Typography sx={{ ml: 1.5, fontWeight: 'fontWeightMedium' }}>{ingredient.title}</Typography>
+          <Typography color={checked ? 'primary' : 'text'} sx={{ ml: 'auto' }}>
+            {ingredient.quantity} {ingredient.units === 'другое' ? '' : ingredient.units}
+          </Typography>
+        </Box>
       </ListItemButton>
     </ListItem>
-  )
-}
+  );
+};

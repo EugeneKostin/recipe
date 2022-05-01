@@ -1,21 +1,19 @@
-import { Typography, Container } from '@mui/material';
+import { Container } from '@mui/material';
 import { Loader } from '../components/UI/Loader';
 import React, { Suspense } from 'react';
+import PageTitle from '../components/UI/PageTitle';
 
 const RecipeList = React.lazy(() => import('../components/RecipeList'));
 
 export const Recipes = () => {
   return (
     <Container
-      maxWidth='xl'
       sx={{
         pb: 8,
       }}>
-      <Typography my={6} variant='h1' component='h1'>
-        Рецепты
-      </Typography>
+      <PageTitle>Рецепты</PageTitle>
       <Suspense fallback={<Loader />}>
-        <RecipeList />
+        <RecipeList sx={{ mt: { xs: 0, md: 4 } }} />
       </Suspense>
     </Container>
   );

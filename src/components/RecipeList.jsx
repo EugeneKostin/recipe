@@ -3,7 +3,7 @@ import { RecipeCard } from './RecipeCard';
 import { getAllDocuments } from '../API/firestore';
 import { Grid } from '@mui/material';
 
-const RecipeList = () => {
+const RecipeList = ({ sx }) => {
   const [recipes, setRecipes] = useState([]);
 
   useEffect(() => {
@@ -25,9 +25,9 @@ const RecipeList = () => {
   // }
 
   return (
-    <Grid container rowSpacing={6} columnSpacing={4}>
+    <Grid container rowSpacing={6} columnSpacing={4} sx={sx}>
       {recipes.map((recipe) => (
-        <Grid key={recipe.id} item xs={12} md={4} lg={3}>
+        <Grid key={recipe.id} item xs={12} md={4}>
           <RecipeCard recipe={recipe} />
           {/* <RecipeCard recipe={recipe} handleDelete={handleDelete} /> */}
         </Grid>

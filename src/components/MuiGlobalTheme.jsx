@@ -1,5 +1,5 @@
 import { ThemeProvider, createTheme, responsiveFontSizes } from '@mui/material/styles';
-import { grey, deepOrange } from '@mui/material/colors';
+import { deepOrange } from '@mui/material/colors';
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
 import '@fontsource/roboto/500.css';
@@ -9,10 +9,11 @@ export const MuiGlobalTheme = ({ children }) => {
   let theme = createTheme({
     palette: {
       primary: deepOrange,
-      secondary: grey,
+      secondary: {
+        main: '#333',
+      },
       text: {
         primary: '#555555',
-        dark: '#333333',
       },
       background: { default: '#fafafa' },
     },
@@ -23,27 +24,27 @@ export const MuiGlobalTheme = ({ children }) => {
         fontSize: 30,
         fontWeight: 500,
         letterSpacing: '0.02em',
-        color: '#333333',
+        color: '#555',
       },
       h2: {
         fontSize: 24,
         fontWeight: 500,
         letterSpacing: '0.02em',
-        color: '#333333',
+        color: '#555',
       },
       subtitle1: {
         fontSize: 22,
         fontWeight: 500,
         lineHeight: 1.2,
         letterSpacing: '0.02em',
-        color: '#333333',
+        color: '#555',
       },
       subtitle2: {
         fontSize: 20,
         fontWeight: 500,
         lineHeight: 1.2,
         letterSpacing: '0.02em',
-        color: '#333333',
+        color: '#555',
       },
       body1: {
         fontSize: 18,

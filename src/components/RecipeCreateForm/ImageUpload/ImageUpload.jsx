@@ -1,17 +1,20 @@
+import { useEffect, useMemo, useState } from 'react';
+import { uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { useFormContext } from 'react-hook-form';
+
 import { Button, Box, Dialog, DialogContent, DialogActions, Typography, Paper, IconButton, Grid } from '@mui/material';
 import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import { useFormContext } from 'react-hook-form';
-import { useEffect, useMemo, useState } from 'react';
+import CloseIcon from '@mui/icons-material/Close';
+import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+
 import ImageUploadIcon from './ImageUploadIcon';
 import Image from '../../UI/Image';
 import UploadProgress from './UploadProgress';
-import CloseIcon from '@mui/icons-material/Close';
 import { getPrettyFileSize } from '../../../utils/filleSizeConverter';
 import { storageRef, deleteImage } from '../../../API/storage';
-import { uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 
 const ImageUploadBar = ({ imageData }) => {
   const { setValue: setFormValue } = useFormContext();
@@ -171,6 +174,7 @@ const ImageUpload = ({ ...props }) => {
   const [imageData, setImageData] = useState(null);
 
   const handleOpen = () => setDialogOpen(true);
+
   const handleClose = () => {
     setDialogOpen(false);
     setImageData(null);
@@ -178,9 +182,7 @@ const ImageUpload = ({ ...props }) => {
 
   return (
     <Box {...props}>
-      <Button onClick={handleOpen} variant='contained' component='label' startIcon={<ArrowCircleUpIcon />}>
-        Загрузить
-      </Button>
+      <UploadButton onClick={handleOpen} />
       <Dialog
         fullWidth
         open={dialogOpen}
@@ -202,4 +204,18 @@ const ImageUpload = ({ ...props }) => {
   );
 };
 
+const UploadButton = ({ onClick }) => {
+  const { getValues: getFormValues } = useFormContext();
+  const isImageURL = getFormValues('imageURL').length;
+
+  return (
+    <Button
+      onClick={onClick}
+      variant='contained'
+      component='label'
+      startIcon={isImageURL ? <CheckCircleOutlineIcon /> : <ArrowCircleUpIcon />}>
+      {isImageURL ? 'Изменить' : 'Загрузить'}
+    </Button>
+  );
+};
 export default ImageUpload;

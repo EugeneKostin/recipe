@@ -1,7 +1,7 @@
 import { Controller, useFormContext } from 'react-hook-form';
 import { TextField } from '@mui/material';
 
-const FormTextField = ({ name, defaultValue, children, helperText = '', ...props }) => {
+const FormTextField = ({ name, defaultValue, children, helperText = ' ', ...props }) => {
   const { control } = useFormContext();
   return (
     <Controller

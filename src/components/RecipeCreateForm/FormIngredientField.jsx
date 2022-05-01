@@ -7,21 +7,24 @@ import FormIngredientItem from './FormIngredientItem';
 import { useEffect, useMemo, useCallback } from 'react';
 
 const FormIngredientField = () => {
-  const { control, formState: { errors }, clearErrors } = useFormContext();
+  const {
+    control,
+    formState: { errors },
+    clearErrors,
+  } = useFormContext();
   const { fields, append, remove } = useFieldArray({
     control,
     name: 'ingredients',
   });
 
-  const handleAddField = useCallback( () => {
-    clearErrors()
-      append({
-        title: '',
-        quantity: '',
-        units: 'гр.',
-      })},
-    [append, clearErrors]
-  );
+  const handleAddField = useCallback(() => {
+    clearErrors();
+    append({
+      title: '',
+      quantity: '',
+      units: 'гр.',
+    });
+  }, [append, clearErrors]);
   const throttledAddButtonClick = useMemo(() => throttle(handleAddField, 500), [handleAddField]);
 
   const handleFieldDelete = (removedFieldIndex) => {
@@ -37,9 +40,14 @@ const FormIngredientField = () => {
   return (
     <Box>
       {fields.map((ingredient, index) => (
-        <FormIngredientItem key={ingredient.id} {...{ control, index, ingredient, handleFieldDelete }} />
+        <FormIngredientItem key={ingredient.id} {...{ control, index, handleFieldDelete }} />
       ))}
-      {errors?.ingredients?.message && <FormHelperText error sx={{ml:2, mt: 2, display: 'flex', alignItems: 'center'}}><SentimentDissatisfiedIcon sx={{mr: 1}}/>{errors?.ingredients?.message}</FormHelperText>}
+      {errors?.ingredients?.message && (
+        <FormHelperText error sx={{ ml: 2, mt: 2, display: 'flex', alignItems: 'center' }}>
+          <SentimentDissatisfiedIcon sx={{ mr: 1 }} />
+          {errors?.ingredients?.message}
+        </FormHelperText>
+      )}
       <Box
         sx={{
           display: 'flex',
@@ -47,7 +55,7 @@ const FormIngredientField = () => {
           mt: 2,
         }}>
         <IconButton title='Добавить' onClick={throttledAddButtonClick} color='primary' size='large'>
-          <AddCircleOutlineOutlinedIcon fontSize='large' />
+          <AddCircleOutlineOutlinedIcon sx={{ fontSize: { xs: '2.8rem', md: '3.4rem' } }} />
         </IconButton>
       </Box>
     </Box>

@@ -7,6 +7,8 @@ import { ReactComponent as ClockIcon } from '../static/icons/clock.svg';
 import { ReactComponent as DishIcon } from '../static/icons/dish.svg';
 import RecipeImg from '../static/images/recipe.png';
 import Image from './UI/Image';
+import { PORTIONS_NUM_WORDS } from '../utils/constants';
+import { getNumWord } from '../utils/helpers';
 
 export const RecipeCard = memo(({ recipe }) => {
   const recipeCreationDate = useMemo(
@@ -19,26 +21,26 @@ export const RecipeCard = memo(({ recipe }) => {
         <CardMedia sx={{ height: 180 }}>
           <Image src={recipe.imageURL ? recipe.imageURL : RecipeImg} alt='recipe' />
         </CardMedia>
-        <CardContent sx={{ height: {xs: 180, md: 200}, display: 'flex', flexDirection: 'column' }}>
+        <CardContent sx={{ height: { xs: 180, sm: 200, md: 200, lg: 220 }, display: 'flex', flexDirection: 'column' }}>
           <TextOverflowWrapper
             variant='subtitle1'
             component='span'
             multiline='true'
             overflowColor='#fff'
-            sx={{ maxHeight: { xs: 40, sm: 45, md: 55 } }}>
+            sx={{ maxHeight: { xs: 40, sm: 50, md: 55, lg: 60 } }}>
             {recipe.title}
           </TextOverflowWrapper>
           <Box sx={{ mt: 1 }}>
             <Box sx={{ display: 'inline-flex', alignItems: 'center' }}>
               <ClockIcon height={20} width={20} />
-              <Typography ml={0.5} variant='body2' component='span'>
+              <Typography ml={1} variant='body2' component='span'>
                 {recipe.cookingTime} мин.
               </Typography>
             </Box>
-            <Box sx={{ display: 'inline-flex', alignItems: 'center', ml: 1 }}>
+            <Box sx={{ display: 'inline-flex', alignItems: 'center', ml: 2 }}>
               <DishIcon height={20} width={20} />
-              <Typography ml={0.5} variant='body2' component='span'>
-                {recipe.portionsNum} порций
+              <Typography ml={1} variant='body2' component='span'>
+                {recipe.portionsNum} {getNumWord(recipe.portionsNum, PORTIONS_NUM_WORDS)}
               </Typography>
             </Box>
           </Box>

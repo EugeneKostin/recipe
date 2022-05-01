@@ -13,7 +13,7 @@ const TextOverflowBox = styled(Typography, {
   '&:before': {
     content: "''",
     width: multiline ? '100%' : '20px',
-    height: multiline ? '5px' : '100%',
+    height: multiline ? '3px' : '100%',
     position: 'absolute',
     right: 0,
     bottom: 0,

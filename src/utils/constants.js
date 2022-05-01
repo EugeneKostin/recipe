@@ -5,5 +5,7 @@ module.exports = Object.freeze({
     FORM_REQUIRED_MESSAGE: 'Заполните это поле',
     FORM_NUMBER_MIN_MESSAGE: 'Должно быть больше',
     FORM_POSITIVE_MESSAGE: 'Должно быть положительным',
-    FORM_NUMBER_TYPEERROR_MESSAGE: 'Введите число'
+    FORM_NUMBER_TYPEERROR_MESSAGE: 'Введите число',
+    INGREDIENT_NUM_WORDS: ['ингредиент', 'ингредиента', 'ингредиентов'],
+    PORTIONS_NUM_WORDS: ['порция', 'порции', 'порций']
 })

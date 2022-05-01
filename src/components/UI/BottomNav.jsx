@@ -8,7 +8,7 @@ export const BottomNav = ({ menuItems }) => {
         display: { xs: 'block', md: 'none' },
         width: '100%',
         position: 'fixed',
-        zIndex: 'zIndex.appBar',
+        zIndex: 'appBar',
         bottom: 0,
         left: 0,
         right: 0,

@@ -1,68 +1,82 @@
-import { grey } from '@mui/material/colors';
 import {
   AppBar,
   Toolbar,
   Typography,
-  Box,
+  Stack,
   Container,
-  MenuList,
-  MenuItem,
+  useScrollTrigger,
+  useTheme,
+  useMediaQuery,
+  Tabs,
+  Tab,
 } from '@mui/material';
-import { NavLink as RouterLink } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { NavLink as RouterLink, useLocation } from 'react-router-dom';
+import { PAGE_RECIPES_PATH } from '../../utils/constants';
 
 export const TopNav = ({ menuItems }) => {
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 200,
+  });
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+
   return (
-    <AppBar position='absolute'>
-      <Container maxWidth='false'>
-        <Toolbar
-          disableGutters
-          sx={{ justifyContent: { xs: 'center', md: 'flex-start' } }}
-        >
+    <AppBar
+      position={trigger ? 'fixed' : 'absolute'}
+      color={trigger ? 'secondary' : 'transparent'}
+      elevation={trigger ? 3 : 0}
+      sx={{
+        transition: (theme) =>
+          theme.transitions.create(['box-shadow', 'color'], {
+            duration: theme.transitions.duration.shortest,
+          }),
+        borderBottom: isMobile && 1,
+        borderColor: isMobile && 'divider',
+      }}>
+      <Container>
+        <Toolbar disableGutters sx={{ justifyContent: { xs: 'center', md: 'space-between' } }}>
           <Typography
-            variant='h6'
+            variant='h4'
             noWrap
-            component='span'
+            component={RouterLink}
+            to={PAGE_RECIPES_PATH}
             sx={{
-              mr: { xs: 0, md: '5vw' },
-              ml: { xs: 0, md: '5vw' },
+              mx: { xs: 0, md: '3vw' },
+              fontFamily: '"Lobster", sans-serif',
               letterSpacing: '.05em',
-              textTransform: 'uppercase',
-            }}
-          >
-            Recipe APP
+              color: 'primary.main',
+              textDecoration: 'none',
+            }}>
+            Recipe App
           </Typography>
-          <Box
-            sx={{
-              flexGrow: 1,
-              display: { xs: 'none', md: 'flex', justifyContent: 'flex-end' },
-            }}
-          >
-            <MenuList component='nav' sx={{ display: 'flex', p: 0 }}>
-              {menuItems.map((menuItem) => (
-                <li key={menuItem.id}>
-                  <MenuItem
-                    sx={{
-                      px: '5vw',
-                      py: 2,
-                      color: grey[100],
-                      letterSpacing: '0.1em',
-                      '&.active': {
-                        color: 'white',
-                        fontWeight: 'fontWeightBold',
-                        letterSpacing: '0.2em',
-                      },
-                    }}
-                    component={RouterLink}
-                    to={menuItem.url}
-                  >
-                    {menuItem.label}
-                  </MenuItem>
-                </li>
-              ))}
-            </MenuList>
-          </Box>
+          {!isMobile && (
+            <Stack direction={'row'}>
+              <NavList navItems={menuItems} linkColor={trigger ? 'white' : 'default'} />
+            </Stack>
+          )}
         </Toolbar>
       </Container>
     </AppBar>
+  );
+};
+
+const NavList = ({ navItems, linkColor }) => {
+  const { pathname } = useLocation();
+  const [value, setValue] = useState(0);
+
+  const handleChange = (e, newValue) => {
+    setValue(newValue);
+  };
+
+  useEffect(() => setValue(navItems.find((item) => pathname.includes(item.url)).id), [navItems, pathname]);
+
+  return (
+    <Tabs value={value} onChange={handleChange} aria-label='top nav'>
+      {navItems.map(({ id, url, label }) => (
+        <Tab key={id} disableRipple component={RouterLink} sx={{ color: linkColor }} to={url} label={label} />
+      ))}
+    </Tabs>
   );
 };
