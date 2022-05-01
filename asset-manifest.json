@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/recipe/static/css/main.51042269.css",
-    "main.js": "/recipe/static/js/main.84908c9d.js",
-    "static/js/282.1c939955.chunk.js": "/recipe/static/js/282.1c939955.chunk.js",
+    "main.js": "/recipe/static/js/main.a97d2c38.js",
+    "static/js/282.5c3386e1.chunk.js": "/recipe/static/js/282.5c3386e1.chunk.js",
     "static/media/recipe.png": "/recipe/static/media/recipe.66d017e855114a90ebc0.png",
     "static/media/roboto-all-500-normal.woff": "/recipe/static/media/roboto-all-500-normal.52cb737b682eb9661ee1.woff",
     "static/media/roboto-all-700-normal.woff": "/recipe/static/media/roboto-all-700-normal.ef6d1d09b20b877fee4e.woff",
@@ -36,17 +36,17 @@
     "static/media/roboto-greek-ext-400-normal.woff2": "/recipe/static/media/roboto-greek-ext-400-normal.bb723e8458c9c653e505.woff2",
     "static/media/roboto-greek-ext-300-normal.woff2": "/recipe/static/media/roboto-greek-ext-300-normal.04e05839d6a35e046c13.woff2",
     "static/media/roboto-greek-ext-700-normal.woff2": "/recipe/static/media/roboto-greek-ext-700-normal.9674bc0ae12c2551d9d1.woff2",
-    "static/media/dish.svg": "/recipe/static/media/dish.276920b79fcc2b59aaccd3b625aaeedb.svg",
     "index.html": "/recipe/index.html",
-    "static/media/clock.svg": "/recipe/static/media/clock.0501856a064e7584bc250c60d59b0890.svg",
-    "static/media/checkbox_checked.svg": "/recipe/static/media/checkbox_checked.fcc1d3597cf32af473203e883217c250.svg",
-    "static/media/checkbox.svg": "/recipe/static/media/checkbox.11f129a047d7a2708886697588c2fa2c.svg",
+    "static/media/dish.svg": "/recipe/static/media/dish.282491ac2bd4818367f31d2161e1efb1.svg",
+    "static/media/clock.svg": "/recipe/static/media/clock.9f4a2fa83da467c0a982e019aea8ffcc.svg",
+    "static/media/checkbox_checked.svg": "/recipe/static/media/checkbox_checked.1933849e149d5ea4cdf88897aa4cdb25.svg",
+    "static/media/checkbox.svg": "/recipe/static/media/checkbox.78027e003958de2ab3ebf5162fa9391b.svg",
     "main.51042269.css.map": "/recipe/static/css/main.51042269.css.map",
-    "main.84908c9d.js.map": "/recipe/static/js/main.84908c9d.js.map",
-    "282.1c939955.chunk.js.map": "/recipe/static/js/282.1c939955.chunk.js.map"
+    "main.a97d2c38.js.map": "/recipe/static/js/main.a97d2c38.js.map",
+    "282.5c3386e1.chunk.js.map": "/recipe/static/js/282.5c3386e1.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.51042269.css",
-    "static/js/main.84908c9d.js"
+    "static/js/main.a97d2c38.js"
   ]
 }
