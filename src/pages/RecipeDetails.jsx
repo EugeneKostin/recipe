@@ -1,35 +1,35 @@
 import {
-  Typography,
-  Container,
+  Alert,
   Box,
-  Paper,
+  Button,
+  Container,
   List,
   ListItem,
-  Button,
   ListItemButton,
-  Tooltip,
+  Paper,
+  Snackbar,
   Stack,
-  Snackbar, Alert
+  Tooltip,
+  Typography
 } from '@mui/material';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import {useState, useEffect, memo, useMemo} from 'react';
+import {memo, useEffect, useMemo, useState} from 'react';
 import {useParams} from 'react-router-dom';
 import {getDocumentById} from '../API/firestore';
 import Image from '../components/UI/Image';
 import {ReactComponent as ClockIcon} from '../static/icons/clock.svg';
 import {ReactComponent as DishIcon} from '../static/icons/dish.svg';
 import CheckBox from '../components/UI/CheckBox';
-import {styled, alpha} from '@mui/material/styles';
+import {alpha, styled} from '@mui/material/styles';
 import RecipeImg from '../static/images/recipe.png';
 import uniqueId from 'lodash/uniqueId';
-import {PORTIONS_NUM_WORDS, INGREDIENT_NUM_WORDS} from '../utils/constants';
+import {INGREDIENT_NUM_WORDS, PORTIONS_NUM_WORDS} from '../utils/constants';
 import {getNumWord} from '../utils/helpers';
 import {Loader} from "../components/UI/Loader";
 
 const StyledImageWrapper = styled(Image)(({theme}) => ({
   maxHeight: 240,
-  position: 'relative',
-  '&:before': {
+  position: 'relative', '&:before': {
     content: "''",
     position: 'absolute',
     top: 0,
@@ -39,11 +39,9 @@ const StyledImageWrapper = styled(Image)(({theme}) => ({
     opacity: 0.4,
     // background: `linear-gradient(0deg, ${theme.palette.primary.main}, ${theme.palette.background.default} 70%)`,
     background: `linear-gradient(0deg, ${theme.palette.primary.main}, transparent 60%)`,
-  },
-  [theme.breakpoints.up('sm')]: {
+  }, [theme.breakpoints.up('sm')]: {
     maxHeight: 350,
-  },
-  [theme.breakpoints.up('md')]: {
+  }, [theme.breakpoints.up('md')]: {
     maxHeight: 450,
   },
 }));
@@ -62,8 +60,7 @@ const StyledGlassWrapper = styled(Paper)(({theme}) => ({
   display: 'flex',
   flexDirection: 'column',
   padding: 16,
-  boxShadow:
-    '2px 2px 6px rgba(0, 0, 0, 0.1), inset 1px 1px 4px rgba(255, 255, 255, 0.05), inset -1px -1px 4px rgba(255, 87, 34, 0.05)',
+  boxShadow: '2px 2px 6px rgba(0, 0, 0, 0.1), inset 1px 1px 4px rgba(255, 255, 255, 0.05), inset -1px -1px 4px rgba(255, 87, 34, 0.05)',
 }));
 
 export const RecipeDetails = memo(() => {
@@ -79,53 +76,49 @@ export const RecipeDetails = memo(() => {
     })();
   }, [recipeId]);
 
-  return (
-    <Container maxWidth='md' disableGutters sx={{pb: 8}}>
-      {recipe ? (
-        <>
-          <StyledImageWrapper
-            src={recipe.imageURL ? recipe.imageURL : RecipeImg}
-            alt='recipe'
-            sx={{borderRadius: {xs: 2, md: 6}, mt: 4}}
-          />
-          <StyledGlassWrapper>
-            <Typography variant='h1' sx={{textAlign: 'center'}}>
-              {recipe.title}
+  return (<Container maxWidth='md' sx={{pb: 8}}>
+    {recipe ? (<>
+      <StyledImageWrapper
+        src={recipe.imageURL ? recipe.imageURL : RecipeImg}
+        alt='recipe'
+        sx={{borderRadius: {xs: 4, md: 8}, mt: 4}}
+      />
+      <StyledGlassWrapper>
+        <Typography variant='h1' sx={{textAlign: 'center'}}>
+          {recipe.title}
+        </Typography>
+        <Typography variant='body2' sx={{textAlign: 'center', mt: 1}}>
+          {ingredientsNum} {getNumWord(ingredientsNum, INGREDIENT_NUM_WORDS)}
+        </Typography>
+        <Box sx={{mt: 2, display: 'flex', justifyContent: 'space-around'}}>
+          <Box sx={{display: 'inline-flex', alignItems: 'center'}}>
+            <ClockIcon height={20} width={20}/>
+            <Typography ml={1} variant='body2' component='span'>
+              {recipe.cookingTime} мин.
             </Typography>
-            <Typography variant='body2' sx={{textAlign: 'center', mt: 1}}>
-              {ingredientsNum} {getNumWord(ingredientsNum, INGREDIENT_NUM_WORDS)}
+          </Box>
+          <Box sx={{display: 'inline-flex', alignItems: 'center', ml: 1}}>
+            <DishIcon height={20} width={20}/>
+            <Typography ml={1} variant='body2' component='span'>
+              {recipe.portionsNum} {getNumWord(recipe.portionsNum, PORTIONS_NUM_WORDS)}
             </Typography>
-            <Box sx={{mt: 2, display: 'flex', justifyContent: 'space-around'}}>
-              <Box sx={{display: 'inline-flex', alignItems: 'center'}}>
-                <ClockIcon height={20} width={20}/>
-                <Typography ml={1} variant='body2' component='span'>
-                  {recipe.cookingTime} мин.
-                </Typography>
-              </Box>
-              <Box sx={{display: 'inline-flex', alignItems: 'center', ml: 1}}>
-                <DishIcon height={20} width={20}/>
-                <Typography ml={1} variant='body2' component='span'>
-                  {recipe.portionsNum} {getNumWord(recipe.portionsNum, PORTIONS_NUM_WORDS)}
-                </Typography>
-              </Box>
-            </Box>
-          </StyledGlassWrapper>
-          <Container sx={{mt: {xs: 6, md: 8}}}>
-            <Typography variant='h2'>Ингредиенты</Typography>
-            <IngredientsList ingredients={recipe.ingredients}/>
-          </Container>
-          <Container sx={{mt: {xs: 6, md: 8}}}>
-            <Typography variant='h2'>Инструкция приготовления</Typography>
-            <Stack spacing={{xs: 4, md: 6}} sx={{mt: {xs: 4, md: 6}}}>
-              {recipe.instructionSteps.map((step, index) => (
-                <InstructionStepsItem key={uniqueId()} {...{step, index}}/>
-              ))}
-            </Stack>
-          </Container>
-        </>
-      ) : <Loader sx={{height: '80vh'}}/>}
-    </Container>
-  );
+          </Box>
+        </Box>
+      </StyledGlassWrapper>
+      <Container disableGutters sx={{mt: {xs: 6, md: 8}}}>
+        <Typography variant='h2'>Ингредиенты</Typography>
+        <IngredientsList ingredients={recipe.ingredients}/>
+      </Container>
+      <Container disableGutters sx={{mt: {xs: 6, md: 8}}}>
+        <Typography variant='h2'>Инструкция приготовления</Typography>
+        <Stack spacing={{xs: 4, md: 6}} sx={{mt: {xs: 4, md: 6}}}>
+          {recipe.instructionSteps.map((step, index) => (
+            <InstructionStepsItem key={uniqueId()} {...{step, index}}/>
+          ))}
+        </Stack>
+      </Container>
+    </>) : <Loader sx={{height: '80vh'}}/>}
+  </Container>);
 });
 
 const IngredientsList = ({ingredients}) => {
@@ -137,67 +130,61 @@ const IngredientsList = ({ingredients}) => {
   }, [ingredients])
 
   const handleCopyClick = () => {
-    navigator.clipboard.writeText(
-      ingredients.reduce((acc, {title, quantity, units}, index) =>
-        !checkedIngredients[index]
-          ? acc.concat(`${index + 1}. ${title} - ${quantity + (units === 'другое' ? '' : (' ' + units))}\n`)
-          : '', '')
-    ).then(() => setSnackbarOpen(true), (err) => console.error({clickboardErr: err}))
+    navigator.clipboard.writeText(ingredients.reduce((acc, {
+      title,
+      quantity,
+      units
+    }, index) => !checkedIngredients[index]
+      ? acc.concat(`${title} - ${quantity + (units === 'другое' ? '' : (' ' + units))}\n`)
+      : acc, '')).then(() => setSnackbarOpen(true), (err) => console.error({clipboardErr: err}))
   }
 
   const handleIngredientClick = (position) => {
-    const updatedCheckedState = checkedIngredients.map((item, index) =>
-      index === position ? !item : item
-    );
+    const updatedCheckedState = checkedIngredients.map((item, index) => index === position ? !item : item);
     setCheckedIngredients(updatedCheckedState);
   }
 
   const handleSnackbarClose = () => setSnackbarOpen(false)
 
-  return (
-    <>
-      <List sx={{mt: 3, p: 0}}>
-        {ingredients.map((ingredient, index) => (
-          <IngredientsItem key={uniqueId()} ingredient={ingredient} checked={checkedIngredients[index]}
-                           index={index} onClick={handleIngredientClick}/>
-        ))}
-      </List>
-      <Tooltip title='Скопировать неотмеченные ингредиенты'>
-        <Button variant='outlined' onClick={handleCopyClick} startIcon={<ContentCopyIcon/>} sx={{mt: 2}}>
-          Неотмеченные
-        </Button>
-      </Tooltip>
-      <Snackbar
-        open={snackbarOpen}
-        autoHideDuration={3000}
-        onClose={handleSnackbarClose}
-        sx={{'&' : {bottom: {xs: 64, md: 24}}}}
-      >
-        <Alert onClose={handleSnackbarClose} color="primary">
-          Скопировано
-        </Alert>
-      </Snackbar>
-    </>
-  )
+  return (<>
+    <List sx={{mt: 3, p: 0}}>
+      {ingredients.map((ingredient, index) => (
+        <IngredientsItem key={uniqueId()} ingredient={ingredient} checked={checkedIngredients[index]}
+                         index={index} onClick={handleIngredientClick}/>))}
+    </List>
+    <Tooltip title='Скопировать неотмеченные ингредиенты'>
+      <Button variant='outlined' onClick={handleCopyClick} startIcon={<ContentCopyIcon/>} sx={{mt: 2}}>
+        Неотмеченные
+      </Button>
+    </Tooltip>
+    <Snackbar
+      open={snackbarOpen}
+      autoHideDuration={3000}
+      onClose={handleSnackbarClose}
+      sx={{'&': {bottom: {xs: 64, md: 24}}}}
+    >
+      <Alert onClose={handleSnackbarClose} color="primary">
+        Скопировано
+      </Alert>
+    </Snackbar>
+  </>)
 }
 
 const IngredientsItem = ({ingredient, index, onClick, checked}) => {
 
   const handleClick = () => onClick(index)
 
-  return (
-    <ListItem disablePadding divider>
-      <ListItemButton role={undefined} onClick={handleClick} dense sx={{px: 0, py: 2}}>
-        <Box sx={{display: 'flex', alignItems: 'center', width: '100%', px: {md: 2}}}>
-          <CheckBox disableRipple checked={checked}/>
-          <Typography sx={{ml: 1.5, fontWeight: 'fontWeightMedium'}}>{ingredient.title}</Typography>
-          <Typography color={checked ? 'primary' : 'text'} sx={{ml: 'auto'}}>
-            {ingredient.quantity} {ingredient.units === 'другое' ? '' : ingredient.units}
-          </Typography>
-        </Box>
-      </ListItemButton>
-    </ListItem>
-  );
+  return (<ListItem disablePadding divider>
+    <ListItemButton role={undefined} onClick={handleClick} dense sx={{px: 0, py: 2}}>
+      <Box sx={{display: 'flex', alignItems: 'center', width: '100%', px: {md: 2}}}>
+        <CheckBox disableRipple checked={checked}/>
+        <Typography sx={{ml: 1.5, fontWeight: 'fontWeightMedium'}}>{ingredient.title}</Typography>
+        <Typography color={checked ? 'primary' : 'text'} sx={{ml: 'auto'}}>
+          {ingredient.quantity} {ingredient.units === 'другое' ? '' : ingredient.units}
+        </Typography>
+      </Box>
+    </ListItemButton>
+  </ListItem>);
 };
 
 const InstructionStepsItem = ({step, index}) => (
@@ -214,11 +201,11 @@ const InstructionStepsItem = ({step, index}) => (
         Шаг {index + 1}
       </Typography>
     </Box>
-    {step.imageURL && <Box sx={{borderRadius: 2, overflow: 'hidden'}}>
-      <Image src={step.imageURL} alt='instruction step'/>
-    </Box>}
+    {step.imageURL &&
+      <Image src={step.imageURL} sx={{borderRadius: 2, height: {xs: '60vmin', md: '70vmin', xl: '60vmin'}}}
+             alt='instruction step'/>
+    }
     <Typography>
       {step.description}
     </Typography>
-  </Stack>
-)
+  </Stack>)

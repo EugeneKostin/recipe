@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useState } from 'react';
-import { Box, MenuItem, IconButton, Collapse, Paper, Stack, Typography } from '@mui/material';
+import {useCallback, useEffect, useState} from 'react';
+import {Box, Collapse, IconButton, MenuItem, Paper, Stack, Typography} from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import FormTextField from './FormTextField';
 
@@ -7,6 +7,10 @@ const quantitySelectors = [
   {
     value: 'гр.',
     label: 'гр.',
+  },
+  {
+    value: 'мл.',
+    label: 'мл.',
   },
   {
     value: 'ч.л',
