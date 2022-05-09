@@ -1,23 +1,23 @@
-import { useEffect, useMemo, useState } from 'react';
-import { uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { useFormContext } from 'react-hook-form';
+import {useEffect, useMemo, useState} from 'react';
+import {uploadBytesResumable, getDownloadURL} from 'firebase/storage';
+import {useFormContext} from 'react-hook-form';
 
-import { Button, Box, Dialog, DialogContent, DialogActions, Typography, Paper, IconButton, Grid } from '@mui/material';
-import ArrowCircleUpIcon from '@mui/icons-material/ArrowCircleUp';
+import {Button, Box, Dialog, DialogContent, DialogActions, Typography, Paper, IconButton, Grid} from '@mui/material';
 import FileDownloadDoneIcon from '@mui/icons-material/FileDownloadDone';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import CloseIcon from '@mui/icons-material/Close';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
+import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 
 import ImageUploadIcon from './ImageUploadIcon';
 import Image from '../../UI/Image';
 import UploadProgress from './UploadProgress';
-import { getPrettyFileSize } from '../../../utils/filleSizeConverter';
-import { storageRef, deleteImage } from '../../../API/storage';
+import {getPrettyFileSize} from '../../../utils/filleSizeConverter';
+import {storageRef, deleteImage} from '../../../API/storage';
 
-const ImageUploadBar = ({ imageData }) => {
-  const { setValue: setFormValue } = useFormContext();
+const ImageUploadBar = ({name, imageData}) => {
+  const {setValue: setFormValue} = useFormContext();
   const [upload, setUpload] = useState(false);
   const [uploadData, setUploadData] = useState({
     error: null,
@@ -28,36 +28,39 @@ const ImageUploadBar = ({ imageData }) => {
   useEffect(() => setUpload(false), [imageData]);
   useEffect(() => {
     // mb handle error state
-    console.log(uploadData);
+    console.log({uploadData});
   }, [uploadData]);
 
   const handleUploadClick = () => {
     setUpload(true);
-    const uploadTask = uploadBytesResumable(storageRef(imageData), imageData);
+    const uploadTask = uploadBytesResumable(
+      storageRef(name.split('.').length > 1 ? `form/${name.split('.')[0]}` : 'form', imageData), imageData
+    );
+
     uploadTask.on(
       'state_changed',
       (snapshot) => {
         const progress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100;
-        console.log('progress', progress);
-        setUploadData((prev) => ({ ...prev, progress }));
+        console.log({progress});
+        setUploadData((prev) => ({...prev, progress}));
         switch (snapshot.state) {
           case 'paused':
-            setUploadData((prev) => ({ ...prev, status: 'paused' }));
+            setUploadData((prev) => ({...prev, status: 'paused'}));
             break;
           case 'running':
-            setUploadData((prev) => ({ ...prev, status: 'running' }));
+            setUploadData((prev) => ({...prev, status: 'running'}));
             break;
           default:
-            setUploadData((prev) => ({ ...prev, status: snapshot.state }));
+            setUploadData((prev) => ({...prev, status: snapshot.state}));
         }
       },
       (error) => {
-        setUploadData((prev) => ({ ...prev, error, status: 'error' }));
+        setUploadData((prev) => ({...prev, error, status: 'error'}));
       },
       () => {
         getDownloadURL(uploadTask.snapshot.ref).then((downloadURL) => {
-          setUploadData((prev) => ({ ...prev, status: 'successful' }));
-          setFormValue('imageURL', downloadURL);
+          setUploadData((prev) => ({...prev, status: 'successful'}));
+          setFormValue(name, downloadURL);
         });
       }
     );
@@ -75,21 +78,21 @@ const ImageUploadBar = ({ imageData }) => {
   const fileSize = useMemo(() => getPrettyFileSize(imageData?.size) || null, [imageData]);
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', width: '100%', mt: 3 }}>
+    <Box sx={{display: 'flex', alignItems: 'center', width: '100%', mt: 3}}>
       {imageData && upload ? (
         <>
           <ImageUploadIcon>
-            {uploadData.status === 'successful' ? <FileDownloadDoneIcon /> : <UploadFileIcon />}
+            {uploadData.status === 'successful' ? <FileDownloadDoneIcon/> : <UploadFileIcon/>}
           </ImageUploadIcon>
-          <Box sx={{ ml: 1, width: { xs: 'calc(100% - 53px)', md: 'calc(100% - 68px)' } }}>
+          <Box sx={{ml: 1, width: {xs: 'calc(100% - 53px)', md: 'calc(100% - 68px)'}}}>
             <Grid container spacing={1} wrap='nowrap'>
               <Grid item xs={10}>
-                <UploadProgress progress={uploadData.progress} fileName={imageData?.name} fileSize={fileSize} />
+                <UploadProgress progress={uploadData.progress} fileName={imageData?.name} fileSize={fileSize}/>
               </Grid>
-              <Grid item xs={2} sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+              <Grid item xs={2} sx={{display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
                 {uploadData.status === 'successful' && (
                   <IconButton onClick={handleCancel} color='primary'>
-                    <CloseIcon />
+                    <CloseIcon/>
                   </IconButton>
                 )}
               </Grid>
@@ -97,7 +100,7 @@ const ImageUploadBar = ({ imageData }) => {
           </Box>
         </>
       ) : (
-        <Button variant='contained' onClick={handleUploadClick} sx={{ mx: 'auto', width: '60%' }}>
+        <Button variant='contained' onClick={handleUploadClick} sx={{mx: 'auto', width: '60%'}}>
           Загрузить
         </Button>
       )}
@@ -105,7 +108,7 @@ const ImageUploadBar = ({ imageData }) => {
   );
 };
 
-const ImageImputWithPreview = ({ setImageData }) => {
+const ImageImputWithPreview = ({setImageData}) => {
   const [preview, setPreview] = useState(null);
 
   const handleImageInputChange = (e) => {
@@ -122,7 +125,7 @@ const ImageImputWithPreview = ({ setImageData }) => {
   };
 
   return (
-    <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%' }}>
+    <Box sx={{display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%'}}>
       <Paper
         elevation={3}
         sx={{
@@ -140,11 +143,11 @@ const ImageImputWithPreview = ({ setImageData }) => {
             height: '100%',
             cursor: 'pointer',
             color: 'grey.100',
-            p: preview ? 0 : { xs: 2, sm: 4 },
+            p: preview ? 0 : {xs: 2, sm: 4},
           }}>
-          <input onChange={handleImageInputChange} name='image' type='file' accept='.png,.jpg,.svg' hidden />
+          <input onChange={handleImageInputChange} name='image' type='file' accept='.png,.jpg,.svg' hidden/>
           {preview ? (
-            <Image src={preview} alt='preview' />
+            <Image src={preview} alt='preview'/>
           ) : (
             <Box
               sx={{
@@ -158,7 +161,7 @@ const ImageImputWithPreview = ({ setImageData }) => {
                 borderColor: 'grey.100',
               }}>
               <Box>
-                <FileUploadIcon sx={{ width: 80, height: 'auto' }} />
+                <FileUploadIcon sx={{width: 80, height: 'auto'}}/>
               </Box>
               <Typography variant='body1'>.png .jpeg .svg</Typography>
             </Box>
@@ -169,7 +172,7 @@ const ImageImputWithPreview = ({ setImageData }) => {
   );
 };
 
-const ImageUpload = ({ ...props }) => {
+const ImageUpload = ({name, ...props}) => {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [imageData, setImageData] = useState(null);
 
@@ -182,19 +185,19 @@ const ImageUpload = ({ ...props }) => {
 
   return (
     <Box {...props}>
-      <UploadButton onClick={handleOpen} />
+      <UploadButton name={name} onClick={handleOpen}/>
       <Dialog
         fullWidth
         open={dialogOpen}
         onClose={handleClose}
         PaperProps={{
-          sx: { m: 0, width: 'calc(100vmin - 32px)', bgcolor: 'grey.50', height: 'max(500px, calc(100vmin - 32px)' },
+          sx: {m: 0, width: 'calc(100vmin - 32px)', bgcolor: 'grey.50', height: 'max(500px, calc(100vmin - 32px)'},
         }}>
-        <DialogContent sx={{ py: 4, px: { xs: 2, md: 4 } }}>
-          <ImageImputWithPreview {...{ setImageData }} />
-          {imageData && <ImageUploadBar {...{ imageData }} />}
+        <DialogContent sx={{py: 4, px: {xs: 2, md: 4}}}>
+          <ImageImputWithPreview {...{setImageData}} />
+          {imageData && <ImageUploadBar {...{imageData, name}} />}
         </DialogContent>
-        <DialogActions sx={{ py: 4, px: { xs: 2, md: 4 } }}>
+        <DialogActions sx={{py: 4, px: {xs: 2, md: 4}}}>
           <Button variant='outlined' onClick={handleClose}>
             Закрыть
           </Button>
@@ -204,16 +207,16 @@ const ImageUpload = ({ ...props }) => {
   );
 };
 
-const UploadButton = ({ onClick }) => {
-  const { getValues: getFormValues } = useFormContext();
-  const isImageURL = getFormValues('imageURL').length;
+const UploadButton = ({name, onClick}) => {
+  const {getValues: getFormValues} = useFormContext();
+  const isImageURL = getFormValues(name).length;
 
   return (
     <Button
       onClick={onClick}
       variant='contained'
       component='label'
-      startIcon={isImageURL ? <CheckCircleOutlineIcon /> : <ArrowCircleUpIcon />}>
+      startIcon={isImageURL ? <CheckCircleOutlineIcon/> : <AddPhotoAlternateIcon/>}>
       {isImageURL ? 'Изменить' : 'Загрузить'}
     </Button>
   );

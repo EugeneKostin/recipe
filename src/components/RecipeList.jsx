@@ -27,7 +27,7 @@ const RecipeList = ({ sx }) => {
   return (
     <Grid container rowSpacing={6} columnSpacing={4} sx={sx}>
       {recipes.map((recipe) => (
-        <Grid key={recipe.id} item xs={12} md={4}>
+        <Grid key={recipe.id} item xs={12} sm={6} md={4} sx={{display: 'flex', justifyContent: 'center'}}>
           <RecipeCard recipe={recipe} />
           {/* <RecipeCard recipe={recipe} handleDelete={handleDelete} /> */}
         </Grid>

@@ -1,4 +1,4 @@
-import { Container } from '@mui/material';
+import {Container} from '@mui/material';
 import { Loader } from '../components/UI/Loader';
 import React, { Suspense } from 'react';
 import PageTitle from '../components/UI/PageTitle';
@@ -12,7 +12,7 @@ export const Recipes = () => {
         pb: 8,
       }}>
       <PageTitle>Рецепты</PageTitle>
-      <Suspense fallback={<Loader />}>
+      <Suspense fallback={<Loader sx={{width: '100%', height: '50vh'}}/>}>
         <RecipeList sx={{ mt: { xs: 0, md: 4 } }} />
       </Suspense>
     </Container>

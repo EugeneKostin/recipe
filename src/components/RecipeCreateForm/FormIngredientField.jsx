@@ -8,12 +8,10 @@ import { useEffect, useMemo, useCallback } from 'react';
 
 const FormIngredientField = () => {
   const {
-    control,
     formState: { errors },
     clearErrors,
   } = useFormContext();
   const { fields, append, remove } = useFieldArray({
-    control,
     name: 'ingredients',
   });
 
@@ -40,7 +38,7 @@ const FormIngredientField = () => {
   return (
     <Box>
       {fields.map((ingredient, index) => (
-        <FormIngredientItem key={ingredient.id} {...{ control, index, handleFieldDelete }} />
+        <FormIngredientItem key={ingredient.id} {...{ index, handleFieldDelete }} />
       ))}
       {errors?.ingredients?.message && (
         <FormHelperText error sx={{ ml: 2, mt: 2, display: 'flex', alignItems: 'center' }}>

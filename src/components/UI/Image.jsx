@@ -4,7 +4,8 @@ import { useEffect, useState } from 'react';
 
 const StyledImg = styled('img')(() => ({
   width: '100%',
-  height: 'auto',
+  objectFit: 'cover',
+  height: '100%',
 }));
 
 export default function Image({ sx, src, alt, ...props }) {
@@ -17,11 +18,11 @@ export default function Image({ sx, src, alt, ...props }) {
       <Box
         {...props}
         sx={{
-          objectFit: 'cover',
           width: '100%',
           height: '100%',
           display: 'flex',
           alignItems: 'center',
+          justifyContent: 'center',
           overflow: 'hidden',
           ...sx,
         }}>

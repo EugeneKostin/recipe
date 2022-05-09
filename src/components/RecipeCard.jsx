@@ -5,7 +5,7 @@ import { NavLink as RouterLink } from 'react-router-dom';
 import TextOverflowWrapper from './UI/TextOverflowWrapper';
 import { ReactComponent as ClockIcon } from '../static/icons/clock.svg';
 import { ReactComponent as DishIcon } from '../static/icons/dish.svg';
-import RecipeImg from '../static/images/recipe.png';
+import recipeImg from '../static/images/recipe.png';
 import Image from './UI/Image';
 import { PORTIONS_NUM_WORDS } from '../utils/constants';
 import { getNumWord } from '../utils/helpers';
@@ -16,10 +16,10 @@ export const RecipeCard = memo(({ recipe }) => {
     [recipe]
   );
   return (
-    <Card sx={{ maxWidth: 345 }} elevation={3}>
+    <Card sx={{ width: 345 }} elevation={3}>
       <CardActionArea component={RouterLink} to={`/recipe/${recipe.id}`} sx={{ height: '100%' }}>
         <CardMedia sx={{ height: 180 }}>
-          <Image src={recipe.imageURL ? recipe.imageURL : RecipeImg} alt='recipe' />
+          <Image src={recipe.imageURL ? recipe.imageURL : recipeImg} alt='recipe' />
         </CardMedia>
         <CardContent sx={{ height: { xs: 180, sm: 200, md: 200, lg: 220 }, display: 'flex', flexDirection: 'column' }}>
           <TextOverflowWrapper
