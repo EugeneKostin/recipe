@@ -111,7 +111,7 @@ export const RecipeDetails = memo(() => {
       </Container>
       <Container disableGutters sx={{mt: {xs: 6, md: 8}}}>
         <Typography variant='h2'>Инструкция приготовления</Typography>
-        <Stack spacing={{xs: 4, md: 6}} sx={{mt: {xs: 4, md: 6}}}>
+        <Stack spacing={{xs: 6, md: 8}} sx={{mt: {xs: 4, md: 6}}}>
           {recipe.instructionSteps.map((step, index) => (
             <InstructionStepsItem key={uniqueId()} {...{step, index}}/>
           ))}
@@ -163,7 +163,13 @@ const IngredientsList = ({ingredients}) => {
       onClose={handleSnackbarClose}
       sx={{'&': {bottom: {xs: 64, md: 24}}}}
     >
-      <Alert onClose={handleSnackbarClose} color="primary">
+      <Alert color="primary" onClose={handleSnackbarClose} sx={{
+        alignItems: 'center',
+        lineHeight: 1,
+        '&.MuiAlert-action': {
+          padding: '0 0 0 16px'
+        }
+      }}>
         Скопировано
       </Alert>
     </Snackbar>

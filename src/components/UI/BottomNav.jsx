@@ -1,11 +1,21 @@
-import { Box, BottomNavigation, BottomNavigationAction, Paper } from '@mui/material';
-import { NavLink as RouterLink } from 'react-router-dom';
+import {BottomNavigation, BottomNavigationAction, Box, Paper} from '@mui/material';
+import {NavLink as RouterLink, useLocation} from 'react-router-dom';
+import {useEffect, useState} from "react";
 
-export const BottomNav = ({ menuItems }) => {
+export const BottomNav = ({menuItems}) => {
+  const {pathname} = useLocation();
+  const [value, setValue] = useState(0);
+
+  const handleChange = (e, newValue) => {
+    setValue(newValue);
+  };
+
+  useEffect(() => setValue(menuItems.find((item) => pathname.includes(item.url)).id), [menuItems, pathname]);
+
   return (
     <Paper
       sx={{
-        display: { xs: 'block', md: 'none' },
+        display: {xs: 'block', md: 'none'},
         width: '100%',
         position: 'fixed',
         zIndex: 'appBar',
@@ -15,7 +25,7 @@ export const BottomNav = ({ menuItems }) => {
       }}
       elevation={3}>
       <Box sx={{ width: '100%' }}>
-        <BottomNavigation showLabels>
+        <BottomNavigation showLabels value={value} onChange={handleChange}>
           {menuItems.map((page) => (
             <BottomNavigationAction
               key={page.id}
@@ -23,7 +33,7 @@ export const BottomNav = ({ menuItems }) => {
               to={page.url}
               label={page.label}
               icon={page.icon}
-              sx={{ '&.active': { color: 'primary.main' } }}
+              sx={{'&.active': {color: 'primary.main'}}}
             />
           ))}
         </BottomNavigation>

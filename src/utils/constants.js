@@ -1,6 +1,6 @@
 module.exports = Object.freeze({
-    PAGE_RECIPES_PATH: '/recipe',
-    PAGE_RECIPES_DEPAILS_PATH: '/recipe/:id',
+    PAGE_RECIPES_PATH: '/recipes',
+    PAGE_RECIPES_DETAILS_PATH: '/recipes/:id',
     PAGE_CREATE_PATH: '/create',
     PAGE_CREATE_SUCCESS_PATH: '/create/success',
     FORM_REQUIRED_MESSAGE: 'Заполните это поле',
